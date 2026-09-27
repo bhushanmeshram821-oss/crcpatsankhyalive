@@ -267,25 +267,18 @@ tbody tr:nth-child(even){
     border: 1px solid #2c3e50;
 }
 
-/* ★ नव्याने जोडलेले: शाळा लॉगिन फॉर्ममधील मुले/मुली एकूण रकाने डिझाईन ★ */
+/* ★ शाळा लॉगिन फॉर्ममधील मुले/मुली एकूण रकाने डिझाईन ★ */
 td.total-b-cell {
-    min-width: 65px;
-    font-size: 16px !important;
-    font-weight: bold;
     color: blue !important;
-    background-color: #eaf2f8 !important; /* फिकट निळा बॅकग्राऊंड */
+    font-weight: bold;
 }
 td.total-g-cell {
-    min-width: 65px;
-    font-size: 16px !important;
-    font-weight: bold;
     color: red !important;
-    background-color: #fdedec !important; /* फिकट लाल बॅकग्राऊंड */
+    font-weight: bold;
 }
 .entry-total-row td {
     background-color: #d5f5e3 !important;
     border-top: 2px solid #27ae60;
-    font-size: 15px !important;
     font-weight: bold;
 }
 
@@ -832,7 +825,7 @@ const schoolsWithUdise = [
 { name:"SKYWARD'S INTERNATIONAL SCHOOL PIMPALGAON", marathiName:"स्कायवर्ड्स इंटरनॅशनल स्कूल पिंपळगाव", udise:"27100503205", type:"Unaided" },
 { name:"Z.P. UPPER PRIMARY SCHOOL RENGEPAR(KOHALI)", marathiName:"जि.प. उच्च प्राथमिक शाळा रेंगेपार (कोहली)", udise:"27100503301", type:"ZP" },
 { name:"Z.P. PRIMARY SCHOOL SAMEWADA", marathiName:"जि.प. प्राथमिक शाळा सामेवाडा", udise:"27100503401", type:"ZP" },
-{ name:"Z.P. PRIMARY SCHOOL KHAIRI", marathiName:"जि.प. प्राथमिक शाळा खैरी", udise:"27100503501", type:"ZP" },
+{ name:"Z.P. PRIMARY SCHOOL KHAIRI", marathiName:"जि.प. प्राथमिक शाळा خैरी", udise:"27100503501", type:"ZP" },
 { name:"Z.P. UPPER PRIMARY SCHOOL MIREGAON", marathiName:"जि.प. उच्च प्राथमिक शाळा मिरेगाव", udise:"27100503601", type:"ZP" },
 { name:"SHUKRACHARYA VIDYALAYA MIREGAON", marathiName:"शुक्राचार्य विद्यालय मिरेगाव", udise:"27100503602", type:"Aided" }
 ];
@@ -1085,7 +1078,7 @@ function verifyUdiseCode(){
 
     /* 11 DIGITS */
     if(!/^\d{11}$/.test(code)){
-        error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यक आहे.";
+        error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यकামো.";
         return;
     }
 
