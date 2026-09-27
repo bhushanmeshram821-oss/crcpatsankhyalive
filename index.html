@@ -267,6 +267,28 @@ tbody tr:nth-child(even){
     border: 1px solid #2c3e50;
 }
 
+/* ★ नव्याने जोडलेले: शाळा लॉगिन फॉर्ममधील मुले/मुली एकूण रकाने डिझाईन ★ */
+td.total-b-cell {
+    min-width: 65px;
+    font-size: 16px !important;
+    font-weight: bold;
+    color: blue !important;
+    background-color: #eaf2f8 !important; /* फिकट निळा बॅकग्राऊंड */
+}
+td.total-g-cell {
+    min-width: 65px;
+    font-size: 16px !important;
+    font-weight: bold;
+    color: red !important;
+    background-color: #fdedec !important; /* फिकट लाल बॅकग्राऊंड */
+}
+.entry-total-row td {
+    background-color: #d5f5e3 !important;
+    border-top: 2px solid #27ae60;
+    font-size: 15px !important;
+    font-weight: bold;
+}
+
 /* Clickable School Name */
 .clickable-school {
     color: #2980b9;
@@ -1183,7 +1205,7 @@ function getClassesForSchool(name, ignoreMapping = false){
     }
     
     if(name.includes("SKYWARD")){
-        return ["Nursery","LKG","UKG","इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ জিজ্ঞাসা","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
+        return ["Nursery","LKG","UKG","इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
     }
     if(name.includes("HIGH SCHOOL")||name.includes("VIDYALAYA")){
         return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
@@ -1224,13 +1246,24 @@ function buildEnrolmentFormRows(school,locked=false){
             ${makeInput(cls,"vja_b",locked)} ${makeInput(cls,"vja_g",locked)}
             ${makeInput(cls,"ews_b",locked)} ${makeInput(cls,"ews_g",locked)}
             ${makeInput(cls,"open_b",locked)} ${makeInput(cls,"open_g",locked)}
-            <td style="width: 65px; min-width: 65px;"><span id="tot_b_${cls}" style="color: blue; font-size: 16px; font-weight: bold;">0</span></td>
-            <td style="width: 65px; min-width: 65px;"><span id="tot_g_${cls}" style="color: red; font-size: 16px; font-weight: bold;">0</span></td>
+            <td class="total-b-cell"><span id="tot_b_${cls}">0</span></td>
+            <td class="total-g-cell"><span id="tot_g_${cls}">0</span></td>
             ${makeInput(cls,"divyang",locked)}
             ${makeInput(cls,"bpl",locked)}
         `;
         tbody.appendChild(tr);
     });
+
+    // ★ नवीन तळाचा रकाना: एकूण पटसंख्या दर्शवण्यासाठी ★
+    const tfoot = document.createElement("tr");
+    tfoot.className = "entry-total-row";
+    tfoot.innerHTML = `
+        <td colspan="18" style="text-align:right; font-weight:bold; padding-right:15px;">शाळेची एकूण पटसंख्या (Grand Total)</td>
+        <td class="total-b-cell" id="form_grand_tot_b">0</td>
+        <td class="total-g-cell" id="form_grand_tot_g">0</td>
+        <td colspan="2"></td>
+    `;
+    tbody.appendChild(tfoot);
 }
 
 /* =========================================================
@@ -1248,6 +1281,22 @@ function calculateRowTotal(el){
 
     document.getElementById(`tot_b_${cls}`).innerText=b;
     document.getElementById(`tot_g_${cls}`).innerText=g;
+
+    updateFormGrandTotal();
+}
+
+function updateFormGrandTotal() {
+    let grandB = 0, grandG = 0;
+    document.querySelectorAll('span[id^="tot_b_"]').forEach(span => {
+        grandB += parseInt(span.innerText || 0);
+    });
+    document.querySelectorAll('span[id^="tot_g_"]').forEach(span => {
+        grandG += parseInt(span.innerText || 0);
+    });
+    const formGtB = document.getElementById('form_grand_tot_b');
+    const formGtG = document.getElementById('form_grand_tot_g');
+    if(formGtB) formGtB.innerText = grandB;
+    if(formGtG) formGtG.innerText = grandG;
 }
 
 /* =========================================================
@@ -1281,7 +1330,10 @@ function loadSchoolEnrolmentData(){
     
     const all=readStorage("schoolEnrolmentData",{});
     const records=all[currentLoggedInSchool];
-    if(!records)return;
+    if(!records) {
+        updateFormGrandTotal(); // जर डेटा नसेल तरी तळातले शून्य (0) अपडेट व्हावेत
+        return;
+    }
 
     Object.keys(records).forEach(cls=>{
         Object.keys(records[cls]).forEach(cat=>{
@@ -1291,6 +1343,8 @@ function loadSchoolEnrolmentData(){
         const first=document.querySelector(`input[data-class="${cls}"]`);
         if(first) calculateRowTotal(first);
     });
+    
+    updateFormGrandTotal();
 }
 
 /* =========================================================
