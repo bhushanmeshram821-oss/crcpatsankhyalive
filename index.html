@@ -9,7 +9,7 @@
 <!-- External Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- नवीन: आलेखासाठी Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- आलेखासाठी Chart.js -->
 
 <style>
 *{box-sizing:border-box}
@@ -410,8 +410,9 @@ input.enrol-input:focus{
     <button id="tabBtn2" style="display:none" onclick="switchTab(2)">📝 पटसंख्या भरणा</button>
     <button id="tabBtn3" style="display:none" onclick="switchTab(3)">📊 व्यवस्थापनानुसार गोषवारा</button>
     <button id="tabBtn4" style="display:none" onclick="switchTab(4)">📈 वर्गनिहाय गोषवारा</button>
-    <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग (Admin)</button>
-    <button id="tabBtn6" style="display:none" onclick="switchTab(6)">📈 कल व आलेख (Trends)</button>
+    <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग</button>
+    <button id="tabBtn6" style="display:none" onclick="switchTab(6)">📈 कल व आलेख</button>
+    <button id="tabBtn7" style="display:none" onclick="switchTab(7)">🏫 शाळानिहाय वर्गवार गोषवारा</button>
 </div>
 
 <!-- PAGE 0 : WELCOME PAGE -->
@@ -688,7 +689,7 @@ input.enrol-input:focus{
     </div>
 </section>
 
-<!-- PAGE 6 : TRENDS AND GRAPHS (नवीन पेज) -->
+<!-- PAGE 6 : TRENDS AND GRAPHS -->
 <section id="section6" class="page-section">
     <div class="sub-title">📈 महिना/वर्षवार पटसंख्या वाढ आणि घट (Trends & Graph)</div>
     
@@ -746,6 +747,27 @@ input.enrol-input:focus{
 
     <div class="page-nav">
         <button onclick="switchTab(5)">⬅️ मागील पेज</button>
+        <button onclick="switchTab(7)">पुढील पेज ➡️</button>
+    </div>
+</section>
+
+<!-- PAGE 7 : SCHOOL-WISE CLASS SUMMARY (नवीन पेज) -->
+<section id="section7" class="page-section">
+    <div class="button-area">
+        <button class="btn red" onclick="downloadPDF('schoolwiseSummaryPrintArea')">📄 PDF डाउनलोड</button>
+    </div>
+    
+    <div id="schoolwiseSummaryPrintArea">
+        <h3 style="text-align:center; color:#2980b9; margin-bottom:5px;">🏫 शाळानिहाय आणि वर्गवार गोषवारा 🏫</h3>
+        <p style="text-align:center; color:#566573; font-size:12px; margin-top:0;">(सर्व शाळांचा स्वतंत्र वर्गनिहाय तपशील)</p>
+        
+        <div id="schoolwiseSummaryContainer">
+            <!-- येथे डायनॅमिकली प्रत्येक शाळेचा टेबल दिसेल -->
+        </div>
+    </div>
+    
+    <div class="page-nav">
+        <button onclick="switchTab(6)">⬅️ मागील पेज</button>
         <span></span>
     </div>
 </section>
@@ -1006,12 +1028,12 @@ function switchTab(n){
     document.getElementById("section"+n).classList.add("active");
     document.getElementById("tabBtn"+n).classList.add("active-tab");
 
-    if(n===3 || n===4) {
+    if(n===3 || n===4 || n===7) { // 7 व्या पेजसाठी सुद्धा डेटा रिफ्रेश
         syncFromGoogleSheet();
         renderAllGoshwaras();
     }
     if(n===5) renderAdminClassSettings();
-    if(n===6) populateTrendDropdowns(); // नवीन टॅब
+    if(n===6) populateTrendDropdowns();
 
     window.scrollTo({top:0, behavior:"smooth"});
 }
@@ -1033,14 +1055,15 @@ function verifyUdiseCode(){
         document.getElementById("tabBtn3").style.display="inline-block";
         document.getElementById("tabBtn4").style.display="inline-block";
         document.getElementById("tabBtn5").style.display="inline-block";
-        document.getElementById("tabBtn6").style.display="inline-block"; // दाखवा
+        document.getElementById("tabBtn6").style.display="inline-block";
+        document.getElementById("tabBtn7").style.display="inline-block"; // नवीन टॅब
         switchTab(3);
         return;
     }
 
     /* 11 DIGITS */
     if(!/^\d{11}$/.test(code)){
-        error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यक গান্ধे.";
+        error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यक आहे.";
         return;
     }
 
@@ -1065,6 +1088,7 @@ function verifyUdiseCode(){
     document.getElementById("tabBtn4").style.display="none";
     document.getElementById("tabBtn5").style.display="none";
     document.getElementById("tabBtn6").style.display="none";
+    document.getElementById("tabBtn7").style.display="none";
 
     document.getElementById("authorizedSchoolName").innerHTML=`
         🏫 <b>${school.name}</b><br>
@@ -1103,6 +1127,7 @@ function logoutSchool(){
     document.getElementById("tabBtn4").style.display="none";
     document.getElementById("tabBtn5").style.display="none";
     document.getElementById("tabBtn6").style.display="none";
+    document.getElementById("tabBtn7").style.display="none";
 
     switchTab(0);
 }
@@ -1625,6 +1650,73 @@ function generateCustomSummary() {
     renderTierGoshwara(allData, selectedClasses, "customSummaryTbody", "customSummaryTable");
 }
 
+/* =========================================================
+    नवीन फंक्शन - शाळानिहाय वर्गवार गोषवारा (Page 7)
+========================================================= */
+function renderSchoolwiseClassSummary(allData) {
+    const container = document.getElementById("schoolwiseSummaryContainer");
+    if (!container) return;
+    container.innerHTML = "";
+
+    schoolsWithUdise.forEach((school, index) => {
+        const classes = getClassesForSchool(school.name);
+        const records = allData[school.name] || {};
+
+        let tableHtml = `
+        <div class="sub-title">${index + 1}. ${school.name} (${school.marathiName})</div>
+        <div class="table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th>अ.क्र.</th>
+                        <th>इयत्ता / वर्ग</th>
+                        <th>एकूण मुले</th>
+                        <th>एकूण मुली</th>
+                        <th>एकूण पटसंख्या</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+        let totalBoys = 0;
+        let totalGirls = 0;
+        let no = 1;
+
+        classes.forEach(cls => {
+            const r = records[cls] || {};
+            const b = Number(r.sc_b||0) + Number(r.st_b||0) + Number(r.nt_b||0) + Number(r.sbc_b||0) + Number(r.obc_b||0) + Number(r.vja_b||0) + Number(r.ews_b||0) + Number(r.open_b||0);
+            const g = Number(r.sc_g||0) + Number(r.st_g||0) + Number(r.nt_g||0) + Number(r.sbc_g||0) + Number(r.obc_g||0) + Number(r.vja_g||0) + Number(r.ews_g||0) + Number(r.open_g||0);
+
+            tableHtml += `
+                <tr>
+                    <td>${no++}</td>
+                    <td><b>${cls}</b></td>
+                    <td>${b}</td>
+                    <td>${g}</td>
+                    <td><b>${b + g}</b></td>
+                </tr>
+            `;
+            totalBoys += b;
+            totalGirls += g;
+        });
+
+        tableHtml += `
+                </tbody>
+                <tfoot>
+                    <tr class="grand-total-row">
+                        <td colspan="2" style="text-align:right; padding-right:10px;"><b>एकूण (Grand Total)</b></td>
+                        <td><b>${totalBoys}</b></td>
+                        <td><b>${totalGirls}</b></td>
+                        <td><b>${totalBoys + totalGirls}</b></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        `;
+        container.innerHTML += tableHtml;
+    });
+}
+
 function renderAllGoshwaras(){
     const data=readStorage("schoolEnrolmentData",{});
     renderCategoryTable(data,"ZP","zpTbody");
@@ -1637,6 +1729,9 @@ function renderAllGoshwaras(){
     renderTierGoshwara(data,["इ.८ वी"],"g8Tbody");
     renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी"],"g1_8Tbody");
     renderTierGoshwara(data,["इ.९ वी","इ.१० वी"],"g9_10Tbody");
+    
+    // Page 7 function call
+    renderSchoolwiseClassSummary(data);
 }
 
 /* =========================================================
@@ -1744,7 +1839,7 @@ function handleExcelUpload(event) {
 }
 
 /* =========================================================
-    TRENDS AND GRAPHS LOGIC (नवीन कोड)
+    TRENDS AND GRAPHS LOGIC 
 ========================================================= */
 let trendChartInstance = null;
 
@@ -1793,7 +1888,6 @@ function populateTrendDropdowns() {
         sel2.innerHTML += `<option value="${k}">${k}</option>`;
     });
 
-    // जर २ किंवा जास्त नोंदी असतील, तर महिना २ ला शेवटची नोंद निवडा
     if(keys.length >= 2) {
         sel1.value = keys[0];
         sel2.value = keys[keys.length - 1];
@@ -1848,7 +1942,6 @@ function generateTrendReport() {
         data2.push(val2);
     });
 
-    // CRC Total Row
     let crcDiff = d2.CRC_TOTAL - d1.CRC_TOTAL;
     let crcDiffHtml = crcDiff > 0 ? `<span style="color:green;font-weight:bold;">+${crcDiff} (वाढ)</span>` : 
                       (crcDiff < 0 ? `<span style="color:red;font-weight:bold;">${crcDiff} (घट)</span>` : `<span style="color:gray;">० (समान)</span>`);
@@ -1864,7 +1957,6 @@ function generateTrendReport() {
 
     document.getElementById("trendReportArea").style.display = "block";
 
-    // Chart.js Graph Drawing
     const ctx = document.getElementById("trendChartCanvas").getContext("2d");
     if(trendChartInstance) {
         trendChartInstance.destroy();
