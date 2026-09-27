@@ -383,7 +383,6 @@ input.enrol-input:focus{
     <button id="tabBtn2" style="display:none" onclick="switchTab(2)">📝 पटसंख्या भरणा</button>
     <button id="tabBtn3" style="display:none" onclick="switchTab(3)">📊 व्यवस्थापनानुसार गोषवारा</button>
     <button id="tabBtn4" style="display:none" onclick="switchTab(4)">📈 वर्गनिहाय गोषवारा</button>
-    <!-- नवीन ॲडमिन सेटिंग टॅब -->
     <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग (Admin)</button>
 </div>
 
@@ -406,12 +405,6 @@ input.enrol-input:focus{
             🚀 प्रणालीमध्ये प्रवेश करा
         </button>
     </div>
-
-    <!-- EXCEL BULK UPLOAD BUTTON -->
-    <label class="btn purple" style="cursor: pointer; display: inline-block; padding: 12px 20px; font-size: 14px;">
-        📁 Excel फाईल अपलोड करा
-        <input type="file" id="excelUploader" accept=".xlsx, .xls" style="display: none;" onchange="handleExcelUpload(event)">
-    </label>
 
 </div>
 </div>
@@ -522,13 +515,18 @@ input.enrol-input:focus{
 
 
 <!-- =====================================================
-     PAGE 3 : MANAGEMENT SUMMARY
+     PAGE 3 : MANAGEMENT SUMMARY (Admin Only)
 ===================================================== -->
 <section id="section3" class="page-section">
 <div class="button-area">
+<!-- EXCEL BULK UPLOAD BUTTON (Only visible to Admin) -->
+<label class="btn purple" style="cursor: pointer; display: inline-block;">
+    📁 Excel फाईल अपलोड करा (Bulk)
+    <input type="file" id="excelUploader" accept=".xlsx, .xls" style="display: none;" onchange="handleExcelUpload(event)">
+</label>
 <button class="btn red" onclick="toggleLockAllData()">🔒 सर्व डेटा लॉक/अनलॉक</button>
-<button class="btn blue" onclick="downloadExcel('mainGoshwaraTable')">📊 Excel</button>
-<button class="btn red" onclick="downloadPDF('printArea1')">📄 PDF</button>
+<button class="btn blue" onclick="downloadExcel('mainGoshwaraTable')">📊 Excel डाउनलोड</button>
+<button class="btn red" onclick="downloadPDF('printArea1')">📄 PDF डाउनलोड</button>
 </div>
 
 <div id="printArea1">
@@ -581,7 +579,7 @@ input.enrol-input:focus{
 
 
 <!-- =====================================================
-     PAGE 4 : CLASS SUMMARY
+     PAGE 4 : CLASS SUMMARY (Admin Only)
 ===================================================== -->
 <section id="section4" class="page-section">
 <div class="button-area">
@@ -648,7 +646,7 @@ input.enrol-input:focus{
 </section>
 
 <!-- =====================================================
-     PAGE 5 : ADMIN CLASSES SETTING
+     PAGE 5 : ADMIN CLASSES SETTING (Admin Only)
 ===================================================== -->
 <section id="section5" class="page-section">
     <div class="sub-title">शाळांनुसार वर्ग निवडा (CRC Admin)</div>
@@ -914,7 +912,6 @@ function renderAdminClassSettings() {
     let mapping = readStorage("schoolClassMapping", {});
 
     schoolsWithUdise.forEach((school, idx) => {
-        // जर आधी सेव्ह केलेला डेटा नसेल, तर डीफॉल्ट लॉजिक वापरा
         let activeClasses = mapping[school.name] || getClassesForSchool(school.name, true); 
         
         let checkboxesHtml = allClassesList.map(cls => {
@@ -946,10 +943,9 @@ function saveAdminClassMapping() {
 }
 
 /* =========================================================
-    CLASSES (With Admin Customization)
+    CLASSES
 ========================================================= */
 function getClassesForSchool(name, ignoreMapping = false){
-    // जर ॲडमिनने सेट केलेले वर्ग असतील तर तेच वापरा
     if(!ignoreMapping) {
         let mapping = readStorage("schoolClassMapping", null);
         if(mapping && mapping[name]) {
@@ -957,7 +953,6 @@ function getClassesForSchool(name, ignoreMapping = false){
         }
     }
     
-    // डीफॉल्ट लॉजिक
     if(name.includes("SKYWARD")){
         return ["Nursery","LKG","UKG","इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
     }
@@ -1205,7 +1200,6 @@ function getSchoolTotals(allData,school){
     return result;
 }
 
-// Grand Total Row जोडण्यासाठी हे नवीन फंक्शन
 function appendGrandTotalRow(tbody, gt, colspanText, colspanCols, hasExtraCols) {
     const tr = document.createElement("tr");
     tr.className = "grand-total-row";
