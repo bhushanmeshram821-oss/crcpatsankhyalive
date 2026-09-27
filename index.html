@@ -242,9 +242,11 @@ th,td{
     font-size:11px;
 }
 
-th{
-    background:#2980b9;
-    color:#fff;
+/* ★ FIX for Divyang and BPL alignment in PDF ★ */
+th {
+    background: #2980b9;
+    color: #fff;
+    vertical-align: middle !important; /* Forces text to middle vertically */
 }
 
 tbody tr:nth-child(odd){
@@ -2155,4 +2157,4 @@ function generateTrendReport() {
 </script>
 
 </body>
-</html> ata table chi print kadhli ki divyang aani bpl yanche heading  vrti disat ahe tevhe sagle heading eka reshet dislet pahije baki kahihi badal nkoy html
+</html>
