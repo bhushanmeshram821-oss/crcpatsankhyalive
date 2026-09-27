@@ -502,7 +502,6 @@ input.enrol-input:focus{
 </div>
 </section>
 
-
 <!-- PAGE 3 : MANAGEMENT SUMMARY (Admin Only) -->
 <section id="section3" class="page-section">
 <div class="button-area">
@@ -557,7 +556,6 @@ input.enrol-input:focus{
 </table>
 </div>
 
-<!-- नवीन जोडलेला तक्ता: सर्व शाळेच्या पटसंख्येखाली वर्गवार मुले-मुली गोषवारा -->
 <div class="sub-title" style="color:#d35400; border-left-color:#d35400;">★ संपूर्ण केंद्राचा इयत्तानिहाय गोषवारा (मुले व मुली)</div>
 <div class="table-responsive">
 <table id="classwiseBoysGirlsTable">
@@ -575,7 +573,6 @@ input.enrol-input:focus{
 </div>
 </section>
 
-
 <!-- PAGE 4 : CLASS SUMMARY (Admin Only) -->
 <section id="section4" class="page-section">
 <div class="button-area">
@@ -586,10 +583,8 @@ input.enrol-input:focus{
 <!-- नवीन सुविधा: विविध वर्ग निवडून गोषवारे तयार करणे -->
 <div class="sub-title">★ स्वतःचा गोषवारा तयार करा (Custom Summary)</div>
 <div style="background:#e8f8f5; padding:15px; border-radius:8px; margin-bottom:20px; border:2px dashed #27ae60;">
-    <p style="margin-top:0; font-size:14px; font-weight:bold; color:#117a65;">कोणत्या इयत्तांचा एकत्रित गोषवारा पाहायचा आहे ते निवडा:</p>
-    <div id="customClassCheckboxes" style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:15px;">
-        <!-- JS will populate checkboxes here -->
-    </div>
+    <p style="margin-top:0; font-size:14px; font-weight:bold; color:#117a65;">कोणत्या इयत्तांचा एकत्रित गोषवारा पाहायचा ഇരുते निवडा:</p>
+    <div id="customClassCheckboxes" style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:15px;"></div>
     <button class="btn green" onclick="generateCustomSummary()">📊 गोषवारा तयार करा</button>
     <button class="btn blue" onclick="downloadExcel('customSummaryTable')">📥 Excel डाउनलोड</button>
     
@@ -748,15 +743,14 @@ let isCRCAdmin=false;
 /* =========================================================
     GOOGLE API INTEGRATION (LIVE SYNC)
 ========================================================= */
-// खालील URL च्या जागी तुमची नवीन तयार केलेली Web App URL टाका
-const GOOGLE_SCRIPT_WEB_URL= "https://script.google.com/macros/s/AKfycbzGBurVB_dBLsBcSp2yT71KrQLRqEc9DZHYbCrc2LJdoBxiTKD5FzmQTCx0BXfXZS3dHQ/exec";
+const GOOGLE_SCRIPT_WEB_URL= "https://script.google.com/macros/s/AKfycbyR1cVq4W3SneJXTp1H-MIttdpUW8nq6_JAFI6meatC_wJptiZFjl2OuVYV88ed6CpO/exec";
 
 function syncFromGoogleSheet() {
     if(!GOOGLE_SCRIPT_WEB_URL) return;
     
     const loadingDiv = document.createElement("div");
     loadingDiv.id = "syncLoader";
-    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.7); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; justify-content:center; align-items:center; font-size:20px; font-weight:bold;'>☁️ क्लाऊडवरून डेटा सिंक होत आहे... कृपया प्रतीक्षा करा.</div>";
+    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.8); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:20px; font-weight:bold;'><span style='font-size:40px; margin-bottom:10px;'>☁️</span>क्लाऊडवरून डेटा सिंक होत आहे... कृपया प्रतीक्षा करा.</div>";
     document.body.appendChild(loadingDiv);
 
     fetch(GOOGLE_SCRIPT_WEB_URL)
@@ -765,7 +759,6 @@ function syncFromGoogleSheet() {
             if (data && Object.keys(data).length > 0) {
                 writeStorage("schoolEnrolmentData", data);
                 console.log("✅ Data Synced successfully from cloud.");
-                // जर ऍडमिन टॅब उघडा असेल तर टेबल्स रिफ्रेश करा
                 if(isCRCAdmin) renderAllGoshwaras();
             }
         })
@@ -781,7 +774,7 @@ function syncToGoogleSheet(school, records) {
     
     const loadingDiv = document.createElement("div");
     loadingDiv.id = "saveLoader";
-    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.7); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; justify-content:center; align-items:center; font-size:20px; font-weight:bold;'>💾 डेटा क्लाऊडवर जतन होत आहे...</div>";
+    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.8); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:20px; font-weight:bold;'><span style='font-size:40px; margin-bottom:10px;'>💾</span>डेटा क्लाऊडवर जतन होत आहे...</div>";
     document.body.appendChild(loadingDiv);
 
     fetch(GOOGLE_SCRIPT_WEB_URL, {
@@ -809,6 +802,45 @@ function syncToGoogleSheet(school, records) {
         
         alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडत आहे.`);
         logoutSchool();
+    });
+}
+
+// नवीन फंक्शन: Excel चा सर्व डेटा एकदम क्लाऊडवर पाठवण्यासाठी
+function syncBulkToGoogleSheet(allData, schoolsCount) {
+    if(!GOOGLE_SCRIPT_WEB_URL) return;
+    
+    const loadingDiv = document.createElement("div");
+    loadingDiv.id = "bulkSaveLoader";
+    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.8); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:18px; font-weight:bold; text-align:center; padding:20px;'><span style='font-size:40px; margin-bottom:10px;'>🚀</span> एक्सेल (Excel) मधील सर्व डेटा क्लाऊडवर (Live) पाठवला जात आहे...<br><br>कृपया थांबा, यास काही सेकंद लागू शकतात.</div>";
+    document.body.appendChild(loadingDiv);
+
+    fetch(GOOGLE_SCRIPT_WEB_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+            action: "bulkSave",
+            allData: allData
+        })
+    })
+    .then(r => r.json())
+    .then(result => {
+        if(result.status === "success") {
+            console.log("✅ Bulk Data saved to cloud successfully.");
+            alert(`✅ यशस्वी! एकूण ${schoolsCount} शाळांचा डेटा Excel मधून क्लाऊडवर (Live) जतन झाला आहे. आता ही माहिती मोबाईलवरही दिसेल.`);
+        }
+    })
+    .catch(e => {
+        console.log(e);
+        alert("⚠️ इंटरनेट समस्येमुळे माहिती क्लाऊडवर सेव्ह होऊ शकली नाही. पण ती लॅपटॉपमध्ये सेव्ह झाली आहे.");
+    })
+    .finally(() => {
+        const loader = document.getElementById("bulkSaveLoader");
+        if(loader) loader.remove();
+        
+        // टेबल्स रिफ्रेश करा
+        if(typeof renderAllGoshwaras === "function"){
+            renderAllGoshwaras();
+        }
     });
 }
 
@@ -858,8 +890,6 @@ window.addEventListener("DOMContentLoaded", function(){
     });
 
     renderCustomClassCheckboxes();
-    
-    // पेज लोड होताच थेट क्लाऊडवरून सिंक करा
     syncFromGoogleSheet();
 });
 
@@ -915,7 +945,6 @@ function switchTab(n){
     document.getElementById("tabBtn"+n).classList.add("active-tab");
 
     if(n===3 || n===4) {
-        // जेव्हा Admin गोषवारा टॅब उघडतो, तेव्हा पुन्हा सिंक करा जेणेकरून नवीन डेटा दिसेल
         syncFromGoogleSheet();
         renderAllGoshwaras();
     }
@@ -1223,7 +1252,6 @@ function saveSchoolEnrolment(){
     all[currentLoggedInSchool]=records;
     if(!writeStorage("schoolEnrolmentData",all)) return;
 
-    // Save and logout inside the sync function to wait for the cloud save
     syncToGoogleSheet(currentLoggedInSchool,records);
 }
 
@@ -1656,12 +1684,11 @@ function handleExcelUpload(event) {
             schoolsUpdated++;
         });
 
+        // 1. डेटा LocalStorage मध्ये सेव्ह करा
         writeStorage("schoolEnrolmentData", allData);
-        alert(`✅ यशस्वी! एकूण ${schoolsUpdated} शाळांचा डेटा Excel मधून अपलोड आणि जतन झाला आहे.`);
         
-        if(typeof renderAllGoshwaras === "function"){
-            renderAllGoshwaras();
-        }
+        // 2. संपूर्ण डेटा Google Sheet (Cloud) वर पाठवा
+        syncBulkToGoogleSheet(allData, schoolsUpdated);
         
         event.target.value = "";
     };
