@@ -410,9 +410,9 @@ input.enrol-input:focus{
     <button id="tabBtn2" style="display:none" onclick="switchTab(2)">📝 पटसंख्या भरणा</button>
     <button id="tabBtn3" style="display:none" onclick="switchTab(3)">📊 व्यवस्थापनानुसार गोषवारा</button>
     <button id="tabBtn4" style="display:none" onclick="switchTab(4)">📈 वर्गनिहाय गोषवारा</button>
-    <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग</button>
+    <button id="tabBtn7" style="display:none" onclick="switchTab(7)">🏫 शाळानिहाय गोषवारा</button>
     <button id="tabBtn6" style="display:none" onclick="switchTab(6)">📈 कल व आलेख</button>
-    <button id="tabBtn7" style="display:none" onclick="switchTab(7)">🏫 शाळानिहाय वर्गवार गोषवारा</button>
+    <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग</button>
 </div>
 
 <!-- PAGE 0 : WELCOME PAGE -->
@@ -657,32 +657,25 @@ input.enrol-input:focus{
 
 <div class="page-nav">
 <button onclick="switchTab(3)">⬅️ मागील पेज</button>
-<span></span>
+<button onclick="switchTab(7)">पुढील पेज ➡️</button>
 </div>
 </section>
 
-<!-- PAGE 5 : ADMIN CLASSES SETTING (Admin Only) -->
-<section id="section5" class="page-section">
-    <div class="sub-title">शाळांनुसार वर्ग निवडा (CRC Admin)</div>
-    <p class="small-note">कोणत्या शाळेला कोणते वर्ग लागू आहेत ते येथे निवडा आणि सेव्ह करा. केलेले बदल लगेच प्रणालीत लागू होतील.</p>
-    
-    <div class="table-responsive">
-        <table>
-            <thead>
-                <tr>
-                    <th style="width:50px">अ.क्र.</th>
-                    <th style="width:250px">शाळेचे नाव</th>
-                    <th>लागू असलेले वर्ग निवडा</th>
-                </tr>
-            </thead>
-            <tbody id="adminClassTbody"></tbody>
-        </table>
-    </div>
-    
+<!-- PAGE 7 : SCHOOL-WISE CLASS SUMMARY (नवीन क्रम) -->
+<section id="section7" class="page-section">
     <div class="button-area">
-        <button class="btn green" onclick="saveAdminClassMapping()">💾 सेटिंग जतन करा</button>
+        <button class="btn red" onclick="downloadPDF('schoolwiseSummaryPrintArea')">📄 PDF डाउनलोड</button>
     </div>
-
+    
+    <div id="schoolwiseSummaryPrintArea">
+        <h3 style="text-align:center; color:#2980b9; margin-bottom:5px;">🏫 शाळानिहाय आणि वर्गवार गोषवारा 🏫</h3>
+        <p style="text-align:center; color:#566573; font-size:12px; margin-top:0;">(सर्व शाळांचा स्वतंत्र वर्गनिहाय तपशील व एकूण गोषवारा)</p>
+        
+        <div id="schoolwiseSummaryContainer">
+            <!-- येथे डायनॅमिकली प्रत्येक शाळेचा टेबल आणि शेवटी एकूण गोषवारा दिसेल -->
+        </div>
+    </div>
+    
     <div class="page-nav">
         <button onclick="switchTab(4)">⬅️ मागील पेज</button>
         <button onclick="switchTab(6)">पुढील पेज ➡️</button>
@@ -746,26 +739,33 @@ input.enrol-input:focus{
     </div>
 
     <div class="page-nav">
-        <button onclick="switchTab(5)">⬅️ मागील पेज</button>
-        <button onclick="switchTab(7)">पुढील पेज ➡️</button>
+        <button onclick="switchTab(7)">⬅️ मागील पेज</button>
+        <button onclick="switchTab(5)">पुढील पेज ➡️</button>
     </div>
 </section>
 
-<!-- PAGE 7 : SCHOOL-WISE CLASS SUMMARY (नवीन पेज) -->
-<section id="section7" class="page-section">
+<!-- PAGE 5 : ADMIN CLASSES SETTING (Admin Only) -->
+<section id="section5" class="page-section">
+    <div class="sub-title">शाळांनुसार वर्ग निवडा (CRC Admin)</div>
+    <p class="small-note">कोणत्या शाळेला कोणते वर्ग लागू आहेत ते येथे निवडा आणि सेव्ह करा. केलेले बदल लगेच प्रणालीत लागू होतील.</p>
+    
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:50px">अ.क्र.</th>
+                    <th style="width:250px">शाळेचे नाव</th>
+                    <th>लागू असलेले वर्ग निवडा</th>
+                </tr>
+            </thead>
+            <tbody id="adminClassTbody"></tbody>
+        </table>
+    </div>
+    
     <div class="button-area">
-        <button class="btn red" onclick="downloadPDF('schoolwiseSummaryPrintArea')">📄 PDF डाउनलोड</button>
+        <button class="btn green" onclick="saveAdminClassMapping()">💾 सेटिंग जतन करा</button>
     </div>
-    
-    <div id="schoolwiseSummaryPrintArea">
-        <h3 style="text-align:center; color:#2980b9; margin-bottom:5px;">🏫 शाळानिहाय आणि वर्गवार गोषवारा 🏫</h3>
-        <p style="text-align:center; color:#566573; font-size:12px; margin-top:0;">(सर्व शाळांचा स्वतंत्र वर्गनिहाय तपशील व एकूण गोषवारा)</p>
-        
-        <div id="schoolwiseSummaryContainer">
-            <!-- येथे डायनॅमिकली प्रत्येक शाळेचा टेबल आणि शेवटी एकूण गोषवारा दिसेल -->
-        </div>
-    </div>
-    
+
     <div class="page-nav">
         <button onclick="switchTab(6)">⬅️ मागील पेज</button>
         <span></span>
@@ -809,7 +809,7 @@ const schoolsWithUdise = [
 { name:"SNEHA KANYA VIDYALAYA PIMPALGAON", marathiName:"स्नेह कन्या विद्यालय पिंपळगाव", udise:"27100503204", type:"Aided" },
 { name:"SKYWARD'S INTERNATIONAL SCHOOL PIMPALGAON", marathiName:"स्कायवर्ड्स इंटरनॅशनल स्कूल पिंपळगाव", udise:"27100503205", type:"Unaided" },
 { name:"Z.P. UPPER PRIMARY SCHOOL RENGEPAR(KOHALI)", marathiName:"जि.प. उच्च प्राथमिक शाळा रेंगेपार (कोहली)", udise:"27100503301", type:"ZP" },
-{ name:"Z.P. PRIMARY SCHOOL SAMEWADA", marathiName:"जि.प. प्राथमिक शाळा ساमेवाडा", udise:"27100503401", type:"ZP" },
+{ name:"Z.P. PRIMARY SCHOOL SAMEWADA", marathiName:"जि.प. प्राथमिक शाळा सामेवाडा", udise:"27100503401", type:"ZP" },
 { name:"Z.P. PRIMARY SCHOOL KHAIRI", marathiName:"जि.प. प्राथमिक शाळा खैरी", udise:"27100503501", type:"ZP" },
 { name:"Z.P. UPPER PRIMARY SCHOOL MIREGAON", marathiName:"जि.प. उच्च प्राथमिक शाळा मिरेगाव", udise:"27100503601", type:"ZP" },
 { name:"SHUKRACHARYA VIDYALAYA MIREGAON", marathiName:"शुक्राचार्य विद्यालय मिरेगाव", udise:"27100503602", type:"Aided" }
@@ -1054,9 +1054,9 @@ function verifyUdiseCode(){
         
         document.getElementById("tabBtn3").style.display="inline-block";
         document.getElementById("tabBtn4").style.display="inline-block";
-        document.getElementById("tabBtn5").style.display="inline-block";
+        document.getElementById("tabBtn7").style.display="inline-block";
         document.getElementById("tabBtn6").style.display="inline-block";
-        document.getElementById("tabBtn7").style.display="inline-block"; // नवीन टॅब
+        document.getElementById("tabBtn5").style.display="inline-block";
         switchTab(3);
         return;
     }
@@ -1183,7 +1183,7 @@ function getClassesForSchool(name, ignoreMapping = false){
     }
     
     if(name.includes("SKYWARD")){
-        return ["Nursery","LKG","UKG","इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
+        return ["Nursery","LKG","UKG","इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ জিজ্ঞাসা","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
     }
     if(name.includes("HIGH SCHOOL")||name.includes("VIDYALAYA")){
         return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
