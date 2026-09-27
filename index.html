@@ -411,10 +411,7 @@ input.enrol-input:focus{
     <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग (Admin)</button>
 </div>
 
-
-<!-- =====================================================
-     PAGE 0 : WELCOME PAGE
-===================================================== -->
+<!-- PAGE 0 : WELCOME PAGE -->
 <section id="section0" class="page-section active">
 <div class="welcome-wrapper">
 <div class="welcome-box">
@@ -437,27 +434,16 @@ input.enrol-input:focus{
 </div>
 </section>
 
-
-<!-- =====================================================
-     PAGE 1 : LOGIN
-===================================================== -->
+<!-- PAGE 1 : LOGIN -->
 <section id="section1" class="page-section">
 <div class="login-wrapper">
 <div class="login-box">
 <div class="login-icon">🏫</div>
-
 <h3>शाळा UDISE Code पडताळणी</h3>
 <p class="small-note">कृपया आपला UDISE Code लिहा.</p>
 
 <label><b>१. 11 अंकी UDISE Code लिहा</b></label>
-<input
-    type="text"
-    id="udiseCodeInput"
-    class="udise-input"
-    maxlength="11"
-    inputmode="numeric"
-    autocomplete="off"
-    placeholder="उदा. 27100500000">
+<input type="text" id="udiseCodeInput" class="udise-input" maxlength="11" inputmode="numeric" autocomplete="off" placeholder="उदा. 27100500000">
 
 <div id="detectedSchoolNameDisplay" class="school-detected"></div>
 
@@ -473,10 +459,7 @@ input.enrol-input:focus{
 </div>
 </section>
 
-
-<!-- =====================================================
-     PAGE 2 : SCHOOL FORM
-===================================================== -->
+<!-- PAGE 2 : SCHOOL FORM -->
 <section id="section2" class="page-section">
 <div id="loggedSchoolTopHeader" class="top-school-bar"></div>
 
@@ -498,28 +481,10 @@ input.enrol-input:focus{
 <tr>
 <th rowspan="2">अ.क्र.</th>
 <th rowspan="2">इयत्ता / वर्ग</th>
-<th colspan="2">SC</th>
-<th colspan="2">ST</th>
-<th colspan="2">NT</th>
-<th colspan="2">SBC</th>
-<th colspan="2">OBC</th>
-<th colspan="2">VJ-A</th>
-<th colspan="2">EWS</th>
-<th colspan="2">Open</th>
-<th colspan="2">एकूण</th>
-<th rowspan="2">दिव्यांग</th>
-<th rowspan="2">BPL</th>
+<th colspan="2">SC</th><th colspan="2">ST</th><th colspan="2">NT</th><th colspan="2">SBC</th><th colspan="2">OBC</th><th colspan="2">VJ-A</th><th colspan="2">EWS</th><th colspan="2">Open</th><th colspan="2">एकूण</th><th rowspan="2">दिव्यांग</th><th rowspan="2">BPL</th>
 </tr>
 <tr>
-<th>मु.</th><th>मुली</th>
-<th>मु.</th><th>मुली</th>
-<th>मु.</th><th>मुली</th>
-<th>मु.</th><th>मुली</th>
-<th>मु.</th><th>मुली</th>
-<th>मु.</th><th>मुली</th>
-<th>मु.</th><th>मुली</th>
-<th>मु.</th><th>मुली</th>
-<th>मु.</th><th>मुली</th>
+<th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th>
 </tr>
 </thead>
 <tbody id="enrolmentTbody"></tbody>
@@ -538,9 +503,7 @@ input.enrol-input:focus{
 </section>
 
 
-<!-- =====================================================
-     PAGE 3 : MANAGEMENT SUMMARY (Admin Only)
-===================================================== -->
+<!-- PAGE 3 : MANAGEMENT SUMMARY (Admin Only) -->
 <section id="section3" class="page-section">
 <div class="button-area">
 <!-- EXCEL BULK UPLOAD BUTTON -->
@@ -604,7 +567,6 @@ input.enrol-input:focus{
 <tbody id="classwiseBoysGirlsTbody"></tbody>
 </table>
 </div>
-
 </div>
 
 <div class="page-nav">
@@ -614,9 +576,7 @@ input.enrol-input:focus{
 </section>
 
 
-<!-- =====================================================
-     PAGE 4 : CLASS SUMMARY (Admin Only)
-===================================================== -->
+<!-- PAGE 4 : CLASS SUMMARY (Admin Only) -->
 <section id="section4" class="page-section">
 <div class="button-area">
 <button class="btn blue" onclick="downloadExcel('g1_4Table')">📊 Excel</button>
@@ -703,9 +663,7 @@ input.enrol-input:focus{
 </div>
 </section>
 
-<!-- =====================================================
-     PAGE 5 : ADMIN CLASSES SETTING (Admin Only)
-===================================================== -->
+<!-- PAGE 5 : ADMIN CLASSES SETTING (Admin Only) -->
 <section id="section5" class="page-section">
     <div class="sub-title">शाळांनुसार वर्ग निवडा (CRC Admin)</div>
     <p class="small-note">कोणत्या शाळेला कोणते वर्ग लागू आहेत ते येथे निवडा आणि सेव्ह करा. केलेले बदल लगेच प्रणालीत लागू होतील.</p>
@@ -735,9 +693,7 @@ input.enrol-input:focus{
 
 </div>
 
-<!-- =====================================================
-     MODAL FOR SCHOOL DETAILS
-===================================================== -->
+<!-- MODAL FOR SCHOOL DETAILS -->
 <div id="schoolModal" class="modal-overlay">
     <div class="modal-content">
         <button class="close-btn" onclick="closeSchoolModal()">✖ बंद करा</button>
@@ -760,7 +716,6 @@ input.enrol-input:focus{
         </div>
     </div>
 </div>
-
 
 <script>
 /* =========================================================
@@ -791,35 +746,97 @@ let currentSchoolType="";
 let isCRCAdmin=false;
 
 /* =========================================================
-    GOOGLE SCRIPT URL
+    GOOGLE API INTEGRATION (LIVE SYNC)
 ========================================================= */
-const GOOGLE_SCRIPT_WEB_URL= "https://script.google.com/macros/s/AKfycbwG9Fre-BZKtuXvBMbVXyhRu8r2M4TqDFYZkC0Ydy8og8oVxLqx4z8pmTClQIWkRtgX2A/exec";
+// खालील URL च्या जागी तुमची नवीन तयार केलेली Web App URL टाका
+const GOOGLE_SCRIPT_WEB_URL= "https://script.google.com/macros/s/AKfycbxiMKbS8LgYPTMiT7s-NF5pp_6vsFL2B8FJRr2LrWEbUmqvmGNrcsiMjLsCh814q7NY/exec";
+
+function syncFromGoogleSheet() {
+    if(!GOOGLE_SCRIPT_WEB_URL) return;
+    
+    const loadingDiv = document.createElement("div");
+    loadingDiv.id = "syncLoader";
+    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.7); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; justify-content:center; align-items:center; font-size:20px; font-weight:bold;'>☁️ क्लाऊडवरून डेटा सिंक होत आहे... कृपया प्रतीक्षा करा.</div>";
+    document.body.appendChild(loadingDiv);
+
+    fetch(GOOGLE_SCRIPT_WEB_URL)
+        .then(r => r.json())
+        .then(data => {
+            if (data && Object.keys(data).length > 0) {
+                writeStorage("schoolEnrolmentData", data);
+                console.log("✅ Data Synced successfully from cloud.");
+                // जर ऍडमिन टॅब उघडा असेल तर टेबल्स रिफ्रेश करा
+                if(isCRCAdmin) renderAllGoshwaras();
+            }
+        })
+        .catch(e => console.log("Google Sync Error:", e))
+        .finally(() => {
+            const loader = document.getElementById("syncLoader");
+            if(loader) loader.remove();
+        });
+}
+
+function syncToGoogleSheet(school, records) {
+    if(!GOOGLE_SCRIPT_WEB_URL) return;
+    
+    const loadingDiv = document.createElement("div");
+    loadingDiv.id = "saveLoader";
+    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.7); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; justify-content:center; align-items:center; font-size:20px; font-weight:bold;'>💾 डेटा क्लाऊडवर जतन होत आहे...</div>";
+    document.body.appendChild(loadingDiv);
+
+    fetch(GOOGLE_SCRIPT_WEB_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({
+            action: "saveSchool",
+            school: school,
+            records: records
+        })
+    })
+    .then(r => r.json())
+    .then(result => {
+        if(result.status === "success") {
+            console.log("✅ Data saved to cloud successfully.");
+        }
+    })
+    .catch(e => {
+        console.log(e);
+        alert("⚠️ इंटरनेट समस्येमुळे माहिती क्लाऊडवर सेव्ह होऊ शकली नाही. पण ती तुमच्या मोबाईल/लॅपटॉप मध्ये सेव्ह झाली आहे.");
+    })
+    .finally(() => {
+        const loader = document.getElementById("saveLoader");
+        if(loader) loader.remove();
+        
+        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडत आहे.`);
+        logoutSchool();
+    });
+}
 
 /* =========================================================
     STORAGE
 ========================================================= */
 function readStorage(key,fallback={}){
-try{
-    const raw=localStorage.getItem(key);
-    if(!raw)return fallback;
-    return JSON.parse(raw);
-}catch(e){
-    return fallback;
-}
+    try{
+        const raw=localStorage.getItem(key);
+        if(!raw)return fallback;
+        return JSON.parse(raw);
+    }catch(e){
+        return fallback;
+    }
 }
 
 function writeStorage(key,value){
-try{
-    localStorage.setItem(key,JSON.stringify(value));
-    return true;
-}catch(e){
-    alert("⚠️ डेटा जतन करता आला नाही.");
-    return false;
-}
+    try{
+        localStorage.setItem(key,JSON.stringify(value));
+        return true;
+    }catch(e){
+        alert("⚠️ डेटा जतन करता आला नाही.");
+        return false;
+    }
 }
 
 /* =========================================================
-    START
+    START (DOMContentLoaded)
 ========================================================= */
 window.addEventListener("DOMContentLoaded", function(){
     let currentData = readStorage("schoolEnrolmentData", {});
@@ -840,9 +857,9 @@ window.addEventListener("DOMContentLoaded", function(){
         if(e.key==="Enter") verifyUdiseCode();
     });
 
-    // Custom Generator Checkboxes
     renderCustomClassCheckboxes();
-
+    
+    // पेज लोड होताच थेट क्लाऊडवरून सिंक करा
     syncFromGoogleSheet();
 });
 
@@ -897,7 +914,11 @@ function switchTab(n){
     document.getElementById("section"+n).classList.add("active");
     document.getElementById("tabBtn"+n).classList.add("active-tab");
 
-    if(n===3 || n===4) renderAllGoshwaras();
+    if(n===3 || n===4) {
+        // जेव्हा Admin गोषवारा टॅब उघडतो, तेव्हा पुन्हा सिंक करा जेणेकरून नवीन डेटा दिसेल
+        syncFromGoogleSheet();
+        renderAllGoshwaras();
+    }
     if(n===5) renderAdminClassSettings();
 
     window.scrollTo({top:0, behavior:"smooth"});
@@ -1179,7 +1200,7 @@ UDISE: ${currentLoggedInUdise}
 }
 
 /* =========================================================
-    SAVE DATA & LOGOUT
+    SAVE DATA
 ========================================================= */
 function saveSchoolEnrolment(){
     if(!currentLoggedInSchool) return;
@@ -1202,15 +1223,8 @@ function saveSchoolEnrolment(){
     all[currentLoggedInSchool]=records;
     if(!writeStorage("schoolEnrolmentData",all)) return;
 
+    // Save and logout inside the sync function to wait for the cloud save
     syncToGoogleSheet(currentLoggedInSchool,records);
-
-    alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!
-
-🏫 ${currentLoggedInSchool}
-(${currentLoggedInMarathiName})
-
-धन्यवाद! आता सिस्टीममधून बाहेर पडत অংশে.`);
-    logoutSchool();
 }
 
 /* =========================================================
@@ -1232,34 +1246,6 @@ function toggleLockAllData(){
     
     alert(newState ? "🔒 सर्व शाळांचा डेटा लॉक झाला." : "🔓 सर्व शाळांचा डेटा अनलॉक झाला.");
     renderAllGoshwaras();
-}
-
-/* =========================================================
-    GOOGLE API INTEGRATION
-========================================================= */
-function syncToGoogleSheet(school,records){
-    if(!GOOGLE_SCRIPT_WEB_URL) return;
-    fetch(GOOGLE_SCRIPT_WEB_URL, {
-        method:"POST",
-        mode:"no-cors",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-            action:"saveSchool",
-            school:school,
-            udise:currentLoggedInUdise,
-            type:currentSchoolType,
-            records:records,
-            savedAt:new Date().toISOString()
-        })
-    }).catch(e=>console.log(e));
-}
-
-function syncFromGoogleSheet(){
-    if(!GOOGLE_SCRIPT_WEB_URL) return;
-    fetch(GOOGLE_SCRIPT_WEB_URL)
-        .then(r=>r.json())
-        .then(data=>{ if(data && Object.keys(data).length > 0) writeStorage("schoolEnrolmentData",data); })
-        .catch(e=>console.log("Google Sync:",e));
 }
 
 /* =========================================================
@@ -1313,7 +1299,6 @@ function openSchoolModal(udise) {
         `;
     });
     
-    // Grand Total row for modal
     tbody.innerHTML += `
         <tr class="grand-total-row">
             <td colspan="17" style="text-align:right"><b>एकूण:</b></td>
@@ -1328,7 +1313,6 @@ function openSchoolModal(udise) {
 function closeSchoolModal() {
     document.getElementById('schoolModal').style.display = 'none';
 }
-
 
 /* =========================================================
     SUMMARY CALCULATIONS & RENDERING
@@ -1443,7 +1427,6 @@ function renderMainGoshwara(allData){
     if (no > 1) appendGrandTotalRow(tbody, gt, "एकूण पटसंख्या (Grand Total)", 3, true);
 }
 
-// नवीन फंक्शन: संपूर्ण केंद्राचा इयत्तानिहाय मुले-मुली गोषवारा
 function renderClasswiseBoysGirls(allData) {
     const tbody = document.getElementById("classwiseBoysGirlsTbody");
     tbody.innerHTML = "";
@@ -1516,7 +1499,7 @@ function renderTierGoshwara(allData,targetClasses,tbodyId, tableId){
         const totalB=x.scB+x.stB+x.ntB+x.sbcB+x.obcB+x.vjaB+x.ewsB+x.openB;
         const totalG=x.scG+x.stG+x.ntG+x.sbcG+x.obcG+x.vjaG+x.ewsG+x.openG;
         
-        if (totalB + totalG === 0) return; // Hide schools with 0 enrollment for selected classes
+        if (totalB + totalG === 0) return; 
 
         gt.scB+=x.scB; gt.scG+=x.scG; gt.stB+=x.stB; gt.stG+=x.stG;
         gt.ntB+=x.ntB; gt.ntG+=x.ntG; gt.sbcB+=x.sbcB; gt.sbcG+=x.sbcG;
@@ -1567,10 +1550,7 @@ function renderAllGoshwaras(){
     renderCategoryTable(data,"Aided","aidedTbody");
     renderCategoryTable(data,"Unaided","unaidedTbody");
     renderMainGoshwara(data);
-    
-    // इयत्तानिहाय मुले-मुली गोषवारा
     renderClasswiseBoysGirls(data);
-
     renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी"],"g1_4Tbody");
     renderTierGoshwara(data,["इ.५ वी","इ.६ वी","इ.७ वी"],"g5_7Tbody");
     renderTierGoshwara(data,["इ.८ वी"],"g8Tbody");
