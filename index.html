@@ -910,7 +910,7 @@ function syncToGoogleSheet(school, records) {
         const loader = document.getElementById("saveLoader");
         if(loader) loader.remove();
         
-        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडतতলা आहे.`);
+        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडत आहे.`);
         logoutSchool();
     });
 }
@@ -1275,6 +1275,14 @@ function buildEnrolmentFormRows(school,locked=false){
         <td><span id="form_tot_bpl">0</span></td>
     `;
     tbody.appendChild(tfoot);
+
+    // ★ नवीन तळाचा रकाना: शाळेची एकूण पटसंख्या (School Grand Total) दर्शवण्यासाठी ★
+    const schoolTotalRow = document.createElement("tr");
+    schoolTotalRow.innerHTML = `
+        <td colspan="18" style="text-align:right; font-weight:bold; padding-right:10px; background-color:#34495e; color:#ffffff; font-size:15px;">शाळेची एकूण पटसंख्या (Total Enrolment) :</td>
+        <td colspan="4" style="font-weight:bold; background-color:#34495e; color:#ffe66d; font-size:16px; text-align:center;"><span id="form_absolute_grand_total">0</span></td>
+    `;
+    tbody.appendChild(schoolTotalRow);
 }
 
 /* =========================================================
@@ -1326,6 +1334,10 @@ function updateFormGrandTotal() {
     const formGtG = document.getElementById('form_grand_tot_g');
     if(formGtB) formGtB.innerText = grandB;
     if(formGtG) formGtG.innerText = grandG;
+
+    // ★ शाळेची एकूण पटसंख्या अपडेट करणे ★
+    const formAbsoluteGt = document.getElementById('form_absolute_grand_total');
+    if(formAbsoluteGt) formAbsoluteGt.innerText = (grandB + grandG);
 }
 
 /* =========================================================
@@ -2143,4 +2155,4 @@ function generateTrendReport() {
 </script>
 
 </body>
-</html>
+</html> ata table chi print kadhli ki divyang aani bpl yanche heading  vrti disat ahe tevhe sagle heading eka reshet dislet pahije baki kahihi badal nkoy html
