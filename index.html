@@ -369,7 +369,7 @@ input.enrol-input:focus{
 
 <!-- HEADER -->
 <div class="main-header">
-    <h2>🏫 समूह साधन केंद्र पिंपळगाव/स.</h2>
+    <h2>🏫 समूह साधन केंद्र पिंपळगाव/स. 🏫</h2>
     <p>
         पंचायत समिती लाखनी, जिल्हा भंडारा |
         शाळा पटसंख्या भरणा व गोषवारा प्रणाली
@@ -378,7 +378,7 @@ input.enrol-input:focus{
 
 <!-- NAVIGATION -->
 <div class="nav-tabs">
-    <button id="tabBtn0" class="active-tab" onclick="switchTab(0)">🏠 स्वागत पेज</button>
+    <button id="tabBtn0" class="active-tab" onclick="switchTab(0)">🏠 स्वागत पेज 🏠</button>
     <button id="tabBtn1" style="display:none" onclick="switchTab(1)">🔐 UDISE लॉगिन</button>
     <button id="tabBtn2" style="display:none" onclick="switchTab(2)">📝 पटसंख्या भरणा</button>
     <button id="tabBtn3" style="display:none" onclick="switchTab(3)">📊 व्यवस्थापनानुसार गोषवारा</button>
@@ -583,11 +583,23 @@ input.enrol-input:focus{
 ===================================================== -->
 <section id="section4" class="page-section">
 <div class="button-area">
-<button class="btn blue" onclick="downloadExcel('g1_4Table')">📊 Excel</button>
+<button class="btn blue" onclick="downloadExcel('classwiseBoysGirlsTable')">📊 Excel</button>
 <button class="btn red" onclick="downloadPDF('printArea2')">📄 PDF</button>
 </div>
 
 <div id="printArea2">
+
+<!-- नवीन जोडलेला तक्ता: इयत्तानिहाय मुले-मुली गोषवारा -->
+<div class="sub-title">★ संपूर्ण केंद्राचा इयत्तानिहाय गोषवारा (मुले व मुली)</div>
+<div class="table-responsive">
+<table id="classwiseBoysGirlsTable">
+<thead>
+<tr><th>अ.क्र.</th><th>इयत्ता / वर्ग</th><th>मुले</th><th>मुली</th><th>एकूण</th></tr>
+</thead>
+<tbody id="classwiseBoysGirlsTbody"></tbody>
+</table>
+</div>
+
 <div class="sub-title">१. वर्ग १ ते ४ - प्राथमिक टप्पा</div>
 <div class="table-responsive">
 <table id="g1_4Table">
@@ -1282,6 +1294,49 @@ function renderMainGoshwara(allData){
     if (no > 1) appendGrandTotalRow(tbody, gt, "एकूण पटसंख्या (Grand Total)", 3, true);
 }
 
+// नवीन फंक्शन: संपूर्ण केंद्राचा इयत्तानिहाय मुले-मुली गोषवारा
+function renderClasswiseBoysGirls(allData) {
+    const tbody = document.getElementById("classwiseBoysGirlsTbody");
+    tbody.innerHTML = "";
+    let no = 1;
+    let gtB = 0, gtG = 0;
+
+    allClassesList.forEach(cls => {
+        let b = 0, g = 0;
+        schoolsWithUdise.forEach(school => {
+            const records = allData[school.name] || {};
+            if(records[cls]) {
+                const r = records[cls];
+                b += Number(r.sc_b||0) + Number(r.st_b||0) + Number(r.nt_b||0) + Number(r.sbc_b||0) + Number(r.obc_b||0) + Number(r.vja_b||0) + Number(r.ews_b||0) + Number(r.open_b||0);
+                g += Number(r.sc_g||0) + Number(r.st_g||0) + Number(r.nt_g||0) + Number(r.sbc_g||0) + Number(r.obc_g||0) + Number(r.vja_g||0) + Number(r.ews_g||0) + Number(r.open_g||0);
+            }
+        });
+        
+        gtB += b;
+        gtG += g;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${no++}</td>
+            <td><b>${cls}</b></td>
+            <td>${b}</td>
+            <td>${g}</td>
+            <td><b>${b + g}</b></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    const tr = document.createElement("tr");
+    tr.className = "grand-total-row";
+    tr.innerHTML = `
+        <td colspan="2" style="text-align:right; padding-right:10px;"><b>एकूण (Grand Total)</b></td>
+        <td><b>${gtB}</b></td>
+        <td><b>${gtG}</b></td>
+        <td><b>${gtB + gtG}</b></td>
+    `;
+    tbody.appendChild(tr);
+}
+
 function renderTierGoshwara(allData,targetClasses,tbodyId){
     const tbody=document.getElementById(tbodyId);
     tbody.innerHTML="";
@@ -1337,6 +1392,10 @@ function renderAllGoshwaras(){
     renderCategoryTable(data,"Aided","aidedTbody");
     renderCategoryTable(data,"Unaided","unaidedTbody");
     renderMainGoshwara(data);
+    
+    // नवीन इयत्तानिहाय गोषवाऱ्याचे फंक्शन
+    renderClasswiseBoysGirls(data);
+
     renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी"],"g1_4Tbody");
     renderTierGoshwara(data,["इ.५ वी","इ.६ वी","इ.७ वी"],"g5_7Tbody");
     renderTierGoshwara(data,["इ.८ वी"],"g8Tbody");
@@ -1401,7 +1460,6 @@ function handleExcelUpload(event) {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, {type: 'array'});
         
-        // आधीचा असलेला डेटा मिळवा जेणेकरून तो डिलीट होणार नाही
         let allData = readStorage("schoolEnrolmentData", {});
         let schoolsUpdated = 0;
 
@@ -1414,7 +1472,6 @@ function handleExcelUpload(event) {
             const worksheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1}); 
             
-            // जर शाळेचा डेटा आधीच असेल तर तो तसाच ठेवा, नसेल तर नवीन ऑब्जेक्ट तयार करा
             let records = allData[school.name] || {};
             
             for(let i = 3; i < jsonData.length; i++) {
@@ -1426,7 +1483,6 @@ function handleExcelUpload(event) {
                 
                 let cls = normalizeClassName(rawCls);
 
-                // जुन्या डेटावर नवीन डेटा ओव्हरराईट करा
                 records[cls] = {
                     sc_b: parseInt(row[2]) || 0, sc_g: parseInt(row[3]) || 0,
                     st_b: parseInt(row[4]) || 0, st_g: parseInt(row[5]) || 0,
@@ -1445,7 +1501,6 @@ function handleExcelUpload(event) {
             schoolsUpdated++;
         });
 
-        // अपडेट झालेला डेटा कायमस्वरूपी सेव्ह करा
         writeStorage("schoolEnrolmentData", allData);
         alert(`✅ यशस्वी! एकूण ${schoolsUpdated} शाळांचा डेटा Excel मधून अपलोड आणि जतन झाला आहे.`);
         
