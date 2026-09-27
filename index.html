@@ -253,6 +253,18 @@ tbody tr:nth-child(even){
     background:#f8f9f9;
 }
 
+/* Grand Total Row styling */
+.grand-total-row {
+    background-color: #34495e !important;
+    color: #ffffff !important;
+    font-weight: bold;
+}
+.grand-total-row td {
+    background-color: #34495e !important;
+    color: #ffffff !important;
+    border: 1px solid #2c3e50;
+}
+
 input.enrol-input::-webkit-outer-spin-button,
 input.enrol-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -371,6 +383,8 @@ input.enrol-input:focus{
     <button id="tabBtn2" style="display:none" onclick="switchTab(2)">📝 पटसंख्या भरणा</button>
     <button id="tabBtn3" style="display:none" onclick="switchTab(3)">📊 व्यवस्थापनानुसार गोषवारा</button>
     <button id="tabBtn4" style="display:none" onclick="switchTab(4)">📈 वर्गनिहाय गोषवारा</button>
+    <!-- नवीन ॲडमिन सेटिंग टॅब -->
+    <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग (Admin)</button>
 </div>
 
 
@@ -633,6 +647,37 @@ input.enrol-input:focus{
 </div>
 </section>
 
+<!-- =====================================================
+     PAGE 5 : ADMIN CLASSES SETTING
+===================================================== -->
+<section id="section5" class="page-section">
+    <div class="sub-title">शाळांनुसार वर्ग निवडा (CRC Admin)</div>
+    <p class="small-note">कोणत्या शाळेला कोणते वर्ग लागू आहेत ते येथे निवडा आणि सेव्ह करा. केलेले बदल लगेच प्रणालीत लागू होतील.</p>
+    
+    <div class="table-responsive">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:50px">अ.क्र.</th>
+                    <th style="width:250px">शाळेचे नाव</th>
+                    <th>लागू असलेले वर्ग निवडा</th>
+                </tr>
+            </thead>
+            <tbody id="adminClassTbody"></tbody>
+        </table>
+    </div>
+    
+    <div class="button-area">
+        <button class="btn green" onclick="saveAdminClassMapping()">💾 सेटिंग जतन करा</button>
+    </div>
+
+    <div class="page-nav">
+        <button onclick="switchTab(3)">⬅️ गोषवारा पहा</button>
+        <span></span>
+    </div>
+</section>
+
+
 </div>
 
 <script>
@@ -651,6 +696,8 @@ const schoolsWithUdise = [
 { name:"Z.P. UPPER PRIMARY SCHOOL MIREGAON", marathiName:"जि.प. उच्च प्राथमिक शाळा मिरेगाव", udise:"27100503601", type:"ZP" },
 { name:"SHUKRACHARYA VIDYALAYA MIREGAON", marathiName:"शुक्राचार्य विद्यालय मिरेगाव", udise:"27100503602", type:"Aided" }
 ];
+
+const allClassesList = ["Nursery","LKG","UKG","इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी","इ.11 वी","इ.12 वी"];
 
 /* =========================================================
     VARIABLES
@@ -693,8 +740,6 @@ try{
     START
 ========================================================= */
 window.addEventListener("DOMContentLoaded", function(){
-    
-    // जर लोकल स्टोरेज रिकामा असेल, तर आपण त्याला रिकामाच ठेवूया (आता वापरकर्ते थेट Excel मधून अपलोड करू शकतात)
     let currentData = readStorage("schoolEnrolmentData", {});
     if(Object.keys(currentData).length === 0) {
         writeStorage("schoolEnrolmentData", {});
@@ -759,7 +804,7 @@ function showSchool(code){
     TAB SWITCH
 ========================================================= */
 function switchTab(n){
-    if(!isCRCAdmin && (n===3 || n===4)) return;
+    if(!isCRCAdmin && (n===3 || n===4 || n===5)) return;
 
     document.querySelectorAll(".page-section").forEach(x=>x.classList.remove("active"));
     document.querySelectorAll(".nav-tabs button").forEach(x=>x.classList.remove("active-tab"));
@@ -768,6 +813,7 @@ function switchTab(n){
     document.getElementById("tabBtn"+n).classList.add("active-tab");
 
     if(n===3 || n===4) renderAllGoshwaras();
+    if(n===5) renderAdminClassSettings();
 
     window.scrollTo({top:0, behavior:"smooth"});
 }
@@ -787,6 +833,7 @@ function verifyUdiseCode(){
         currentLoggedInUdise="9999";
         document.getElementById("tabBtn3").style.display="inline-block";
         document.getElementById("tabBtn4").style.display="inline-block";
+        document.getElementById("tabBtn5").style.display="inline-block";
         switchTab(3);
         return;
     }
@@ -816,6 +863,7 @@ function verifyUdiseCode(){
     document.getElementById("tabBtn2").style.display="inline-block";
     document.getElementById("tabBtn3").style.display="none";
     document.getElementById("tabBtn4").style.display="none";
+    document.getElementById("tabBtn5").style.display="none";
 
     document.getElementById("authorizedSchoolName").innerHTML=`
         🏫 <b>${school.name}</b><br>
@@ -852,14 +900,64 @@ function logoutSchool(){
     document.getElementById("tabBtn2").style.display="none";
     document.getElementById("tabBtn3").style.display="none";
     document.getElementById("tabBtn4").style.display="none";
+    document.getElementById("tabBtn5").style.display="none";
 
     switchTab(0);
 }
 
 /* =========================================================
-    CLASSES
+    ADMIN CLASS SETTINGS
 ========================================================= */
-function getClassesForSchool(name){
+function renderAdminClassSettings() {
+    const tbody = document.getElementById("adminClassTbody");
+    tbody.innerHTML = "";
+    let mapping = readStorage("schoolClassMapping", {});
+
+    schoolsWithUdise.forEach((school, idx) => {
+        // जर आधी सेव्ह केलेला डेटा नसेल, तर डीफॉल्ट लॉजिक वापरा
+        let activeClasses = mapping[school.name] || getClassesForSchool(school.name, true); 
+        
+        let checkboxesHtml = allClassesList.map(cls => {
+            let checked = activeClasses.includes(cls) ? "checked" : "";
+            return `<label style="margin-right:12px; display:inline-block; margin-bottom:5px;">
+                        <input type="checkbox" data-school="${school.name}" value="${cls}" ${checked}> ${cls}
+                    </label>`;
+        }).join(" ");
+
+        let tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td style="text-align:left;"><b>${school.name}</b><br><span style="font-size:10px; color:#27ae60">${school.marathiName}</span></td>
+            <td style="text-align:left;">${checkboxesHtml}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function saveAdminClassMapping() {
+    let mapping = {};
+    schoolsWithUdise.forEach(school => {
+        let checkboxes = document.querySelectorAll(`input[data-school="${school.name}"]:checked`);
+        let selected = Array.from(checkboxes).map(cb => cb.value);
+        mapping[school.name] = selected;
+    });
+    writeStorage("schoolClassMapping", mapping);
+    alert("✅ शाळांचे वर्ग यशस्वीरीत्या जतन केले!");
+}
+
+/* =========================================================
+    CLASSES (With Admin Customization)
+========================================================= */
+function getClassesForSchool(name, ignoreMapping = false){
+    // जर ॲडमिनने सेट केलेले वर्ग असतील तर तेच वापरा
+    if(!ignoreMapping) {
+        let mapping = readStorage("schoolClassMapping", null);
+        if(mapping && mapping[name]) {
+            return mapping[name];
+        }
+    }
+    
+    // डीफॉल्ट लॉजिक
     if(name.includes("SKYWARD")){
         return ["Nursery","LKG","UKG","इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
     }
@@ -867,7 +965,7 @@ function getClassesForSchool(name){
         return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
     }
     if(name.includes("UPPER PRIMARY")){
-        return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७্বা वी","इ.८ वी"];
+        return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी"];
     }
     return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी"];
 }
@@ -1107,13 +1205,41 @@ function getSchoolTotals(allData,school){
     return result;
 }
 
+// Grand Total Row जोडण्यासाठी हे नवीन फंक्शन
+function appendGrandTotalRow(tbody, gt, colspanText, colspanCols, hasExtraCols) {
+    const tr = document.createElement("tr");
+    tr.className = "grand-total-row";
+    tr.innerHTML = `
+        <td colspan="${colspanCols}" style="text-align:right; padding-right:10px;"><b>${colspanText}</b></td>
+        <td><b>${gt.scB}/${gt.scG}</b></td>
+        <td><b>${gt.stB}/${gt.stG}</b></td>
+        <td><b>${gt.ntB}/${gt.ntG}</b></td>
+        <td><b>${gt.sbcB}/${gt.sbcG}</b></td>
+        <td><b>${gt.obcB}/${gt.obcG}</b></td>
+        <td><b>${gt.vjaB}/${gt.vjaG}</b></td>
+        <td><b>${gt.ewsB}/${gt.ewsG}</b></td>
+        <td><b>${gt.openB}/${gt.openG}</b></td>
+        <td><b>${gt.totalB}/${gt.totalG}<br>एकूण: ${gt.totalB+gt.totalG}</b></td>
+        ${hasExtraCols ? `<td><b>${gt.div}</b></td><td><b>${gt.bpl}</b></td>` : ''}
+    `;
+    tbody.appendChild(tr);
+}
+
 function renderCategoryTable(allData,type,tbodyId){
     const tbody=document.getElementById(tbodyId);
     tbody.innerHTML="";
     let no=1;
+    let gt = {scB:0,scG:0,stB:0,stG:0,ntB:0,ntG:0,sbcB:0,sbcG:0,obcB:0,obcG:0,vjaB:0,vjaG:0,ewsB:0,ewsG:0,openB:0,openG:0,div:0,bpl:0, totalB:0, totalG:0};
 
     schoolsWithUdise.filter(s=>s.type===type).forEach(school=>{
         const r=getSchoolTotals(allData,school);
+        
+        gt.scB+=r.scB; gt.scG+=r.scG; gt.stB+=r.stB; gt.stG+=r.stG;
+        gt.ntB+=r.ntB; gt.ntG+=r.ntG; gt.sbcB+=r.sbcB; gt.sbcG+=r.sbcG;
+        gt.obcB+=r.obcB; gt.obcG+=r.obcG; gt.vjaB+=r.vjaB; gt.vjaG+=r.vjaG;
+        gt.ewsB+=r.ewsB; gt.ewsG+=r.ewsG; gt.openB+=r.openB; gt.openG+=r.openG;
+        gt.totalB+=r.totalB; gt.totalG+=r.totalG; gt.div+=r.div; gt.bpl+=r.bpl;
+
         const tr=document.createElement("tr");
         tr.innerHTML=`
             <td>${no++}</td>
@@ -1125,15 +1251,25 @@ function renderCategoryTable(allData,type,tbodyId){
         `;
         tbody.appendChild(tr);
     });
+    
+    if (no > 1) appendGrandTotalRow(tbody, gt, "एकूण (Grand Total)", 2, true);
 }
 
 function renderMainGoshwara(allData){
     const tbody=document.getElementById("mainGoshwaraTbody");
     tbody.innerHTML="";
     let no=1;
+    let gt = {scB:0,scG:0,stB:0,stG:0,ntB:0,ntG:0,sbcB:0,sbcG:0,obcB:0,obcG:0,vjaB:0,vjaG:0,ewsB:0,ewsG:0,openB:0,openG:0,div:0,bpl:0, totalB:0, totalG:0};
 
     schoolsWithUdise.forEach(school=>{
         const r=getSchoolTotals(allData,school);
+        
+        gt.scB+=r.scB; gt.scG+=r.scG; gt.stB+=r.stB; gt.stG+=r.stG;
+        gt.ntB+=r.ntB; gt.ntG+=r.ntG; gt.sbcB+=r.sbcB; gt.sbcG+=r.sbcG;
+        gt.obcB+=r.obcB; gt.obcG+=r.obcG; gt.vjaB+=r.vjaB; gt.vjaG+=r.vjaG;
+        gt.ewsB+=r.ewsB; gt.ewsG+=r.ewsG; gt.openB+=r.openB; gt.openG+=r.openG;
+        gt.totalB+=r.totalB; gt.totalG+=r.totalG; gt.div+=r.div; gt.bpl+=r.bpl;
+
         let badge = school.type==="ZP" ? '<span class="badge zp">जि.प.</span>' : (school.type==="Aided" ? '<span class="badge aided">अनुदानित</span>' : '<span class="badge unaided">विनाअनुदानित</span>');
         
         const tr=document.createElement("tr");
@@ -1148,12 +1284,15 @@ function renderMainGoshwara(allData){
         `;
         tbody.appendChild(tr);
     });
+
+    if (no > 1) appendGrandTotalRow(tbody, gt, "एकूण पटसंख्या (Grand Total)", 3, true);
 }
 
 function renderTierGoshwara(allData,targetClasses,tbodyId){
     const tbody=document.getElementById(tbodyId);
     tbody.innerHTML="";
     let no=1;
+    let gt = {scB:0,scG:0,stB:0,stG:0,ntB:0,ntG:0,sbcB:0,sbcG:0,obcB:0,obcG:0,vjaB:0,vjaG:0,ewsB:0,ewsG:0,openB:0,openG:0, totalB:0, totalG:0};
 
     schoolsWithUdise.forEach(school=>{
         const classes=getClassesForSchool(school.name);
@@ -1178,6 +1317,12 @@ function renderTierGoshwara(allData,targetClasses,tbodyId){
         const totalB=x.scB+x.stB+x.ntB+x.sbcB+x.obcB+x.vjaB+x.ewsB+x.openB;
         const totalG=x.scG+x.stG+x.ntG+x.sbcG+x.obcG+x.vjaG+x.ewsG+x.openG;
 
+        gt.scB+=x.scB; gt.scG+=x.scG; gt.stB+=x.stB; gt.stG+=x.stG;
+        gt.ntB+=x.ntB; gt.ntG+=x.ntG; gt.sbcB+=x.sbcB; gt.sbcG+=x.sbcG;
+        gt.obcB+=x.obcB; gt.obcG+=x.obcG; gt.vjaB+=x.vjaB; gt.vjaG+=x.vjaG;
+        gt.ewsB+=x.ewsB; gt.ewsG+=x.ewsG; gt.openB+=x.openB; gt.openG+=x.openG;
+        gt.totalB+=totalB; gt.totalG+=totalG;
+
         const tr=document.createElement("tr");
         tr.innerHTML=`
             <td>${no++}</td>
@@ -1188,6 +1333,8 @@ function renderTierGoshwara(allData,targetClasses,tbodyId){
         `;
         tbody.appendChild(tr);
     });
+
+    if (no > 1) appendGrandTotalRow(tbody, gt, "एकूण (Grand Total)", 2, false);
 }
 
 function renderAllGoshwaras(){
@@ -1236,33 +1383,18 @@ function downloadSchoolPDF(){
 }
 
 /* =========================================================
-    EXCEL BULK UPLOAD FACILITY (with Mapping fix)
+    EXCEL BULK UPLOAD FACILITY 
 ========================================================= */
-
-// Excel फाईलमधील इयत्तेची नावे (उदा. "इ .1 ली") HTML च्या नावांसोबत (उदा. "इ.१ ली") जुळवण्यासाठी हे फंक्शन जोडले आहे.
 function normalizeClassName(cls) {
     if(!cls) return "";
     cls = cls.trim();
-    
-    // मॅपिंग डिक्शनरी
     const map = {
-        "इ .1 ली": "इ.१ ली",
-        "इ. 1 ली": "इ.१ ली",
-        "इ.1 ली": "इ.१ ली",
-        "इ.2 री": "इ.२ री",
-        "इ.3 री": "इ.३ री",
-        "इ.4 थी": "इ.४ थी",
-        "इ.5 वी": "इ.५ वी",
-        "इ.6 वी": "इ.६ वी",
-        "इ.7 वी": "इ.७ वी",
-        "इ.8 वी": "इ.८ वी",
-        "इ.9 वी": "इ.९ वी",
-        "इ. 10 वी": "इ.१० वी",
-        "इ.10 वी": "इ.१० वी",
-        "इ.11 वी": "इ.11 वी",
-        "इ.12 वी": "इ.12 वी"
+        "इ .1 ली": "इ.१ ली", "इ. 1 ली": "इ.१ ली", "इ.1 ली": "इ.१ ली",
+        "इ.2 री": "इ.२ री", "इ.3 री": "इ.३ री", "इ.4 थी": "इ.४ थी",
+        "इ.5 वी": "इ.५ वी", "इ.6 वी": "इ.६ वी", "इ.7 वी": "इ.७ वी",
+        "इ.8 वी": "इ.८ वी", "इ.9 वी": "इ.९ वी", "इ. 10 वी": "इ.१० वी",
+        "इ.10 वी": "इ.१० वी", "इ.11 वी": "इ.11 वी", "इ.12 वी": "इ.12 वी"
     };
-    
     return map[cls] || cls;
 }
 
@@ -1296,7 +1428,6 @@ function handleExcelUpload(event) {
                 let rawCls = row[1].toString().trim();
                 if(rawCls === 'एकूण') continue; 
                 
-                // वर्ग मॅपिंग फंक्शनला पाठवा
                 let cls = normalizeClassName(rawCls);
 
                 records[cls] = {
