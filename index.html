@@ -759,10 +759,10 @@ input.enrol-input:focus{
     
     <div id="schoolwiseSummaryPrintArea">
         <h3 style="text-align:center; color:#2980b9; margin-bottom:5px;">🏫 शाळानिहाय आणि वर्गवार गोषवारा 🏫</h3>
-        <p style="text-align:center; color:#566573; font-size:12px; margin-top:0;">(सर्व शाळांचा स्वतंत्र वर्गनिहाय तपशील)</p>
+        <p style="text-align:center; color:#566573; font-size:12px; margin-top:0;">(सर्व शाळांचा स्वतंत्र वर्गनिहाय तपशील व एकूण गोषवारा)</p>
         
         <div id="schoolwiseSummaryContainer">
-            <!-- येथे डायनॅमिकली प्रत्येक शाळेचा टेबल दिसेल -->
+            <!-- येथे डायनॅमिकली प्रत्येक शाळेचा टेबल आणि शेवटी एकूण गोषवारा दिसेल -->
         </div>
     </div>
     
@@ -809,7 +809,7 @@ const schoolsWithUdise = [
 { name:"SNEHA KANYA VIDYALAYA PIMPALGAON", marathiName:"स्नेह कन्या विद्यालय पिंपळगाव", udise:"27100503204", type:"Aided" },
 { name:"SKYWARD'S INTERNATIONAL SCHOOL PIMPALGAON", marathiName:"स्कायवर्ड्स इंटरनॅशनल स्कूल पिंपळगाव", udise:"27100503205", type:"Unaided" },
 { name:"Z.P. UPPER PRIMARY SCHOOL RENGEPAR(KOHALI)", marathiName:"जि.प. उच्च प्राथमिक शाळा रेंगेपार (कोहली)", udise:"27100503301", type:"ZP" },
-{ name:"Z.P. PRIMARY SCHOOL SAMEWADA", marathiName:"जि.प. प्राथमिक शाळा सामेवाडा", udise:"27100503401", type:"ZP" },
+{ name:"Z.P. PRIMARY SCHOOL SAMEWADA", marathiName:"जि.प. प्राथमिक शाळा ساमेवाडा", udise:"27100503401", type:"ZP" },
 { name:"Z.P. PRIMARY SCHOOL KHAIRI", marathiName:"जि.प. प्राथमिक शाळा खैरी", udise:"27100503501", type:"ZP" },
 { name:"Z.P. UPPER PRIMARY SCHOOL MIREGAON", marathiName:"जि.प. उच्च प्राथमिक शाळा मिरेगाव", udise:"27100503601", type:"ZP" },
 { name:"SHUKRACHARYA VIDYALAYA MIREGAON", marathiName:"शुक्राचार्य विद्यालय मिरेगाव", udise:"27100503602", type:"Aided" }
@@ -1658,6 +1658,11 @@ function renderSchoolwiseClassSummary(allData) {
     if (!container) return;
     container.innerHTML = "";
 
+    let grandClasses = {};
+    allClassesList.forEach(c => grandClasses[c] = {b:0, g:0});
+
+    let html = "";
+
     schoolsWithUdise.forEach((school, index) => {
         const classes = getClassesForSchool(school.name);
         const records = allData[school.name] || {};
@@ -1698,6 +1703,10 @@ function renderSchoolwiseClassSummary(allData) {
             `;
             totalBoys += b;
             totalGirls += g;
+
+            // Add to grand total
+            grandClasses[cls].b += b;
+            grandClasses[cls].g += g;
         });
 
         tableHtml += `
@@ -1713,8 +1722,63 @@ function renderSchoolwiseClassSummary(allData) {
             </table>
         </div>
         `;
-        container.innerHTML += tableHtml;
+        html += tableHtml;
     });
+
+    // ---------------------------------------------------------
+    // ★ संपूर्ण केंद्राचा एकत्रित वर्गवार गोषवारा
+    // ---------------------------------------------------------
+    let crcHtml = `
+    <div class="sub-title" style="color:#d35400; border-left-color:#d35400; margin-top:30px; font-size:16px;">★ संपूर्ण केंद्राचा एकत्रित वर्गवार गोषवारा (सर्व शाळा मिळून)</div>
+    <div class="table-responsive" style="margin-bottom:30px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>अ.क्र.</th>
+                    <th>इयत्ता / वर्ग</th>
+                    <th>एकूण मुले</th>
+                    <th>एकूण मुली</th>
+                    <th>एकूण पटसंख्या</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+    
+    let cNo = 1;
+    let cBoys = 0;
+    let cGirls = 0;
+    allClassesList.forEach(cls => {
+        let b = grandClasses[cls].b;
+        let g = grandClasses[cls].g;
+        
+        crcHtml += `
+            <tr>
+                <td>${cNo++}</td>
+                <td><b>${cls}</b></td>
+                <td>${b}</td>
+                <td>${g}</td>
+                <td><b>${b + g}</b></td>
+            </tr>
+        `;
+        cBoys += b;
+        cGirls += g;
+    });
+
+    crcHtml += `
+            </tbody>
+            <tfoot>
+                <tr class="grand-total-row">
+                    <td colspan="2" style="text-align:right; padding-right:10px;"><b>संपूर्ण केंद्राची एकूण पटसंख्या</b></td>
+                    <td><b>${cBoys}</b></td>
+                    <td><b>${cGirls}</b></td>
+                    <td><b>${cBoys + cGirls}</b></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    `;
+
+    container.innerHTML = html + crcHtml;
 }
 
 function renderAllGoshwaras(){
