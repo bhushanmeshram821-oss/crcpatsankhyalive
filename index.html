@@ -404,18 +404,11 @@ input.enrol-input:focus{
 <div class="login-wrapper">
 <div class="login-box">
 <div class="login-icon">🏫</div>
+
 <h3>शाळा UDISE Code पडताळणी</h3>
+<p class="small-note">कृपया आपला UDISE Code लिहा.</p>
 
-<!-- EXCEL UPLOAD SECTION ADDED HERE -->
-<div style="background: #e8f8f5; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 2px dashed #27ae60; text-align: left;">
-    <label style="color:#117a65; font-weight:bold; font-size:14px; display:block; margin-bottom:8px;">
-        📂 १. आधी 'school enrollment.xlsx' फाईल निवडा (पर्यायी):
-    </label>
-    <input type="file" id="excelUpload" accept=".xlsx, .xls" onchange="handleExcelUpload(event)" style="width:100%; font-size:13px;">
-    <div id="excelStatus" style="font-size:12px; color:#d35400; margin-top:8px; font-weight:bold;">फाईल अद्याप अपलोड केलेली नाही.</div>
-</div>
-
-<label style="display: block; text-align: left;"><b>२. 11 अंकी UDISE Code लिहा</b></label>
+<label><b>१. 11 अंकी UDISE Code लिहा</b></label>
 <input
     type="text"
     id="udiseCodeInput"
@@ -637,20 +630,20 @@ input.enrol-input:focus{
     SCHOOL MASTER
 ========================================================= */
 const schoolsWithUdise = [
-{name:"Z.P. PRIMARY SCHOOL PIMPALGAON", marathiName:"जि.प. प्राथमिक शाळा पिंपळगाव", udise:"27100503201", type:"ZP"},
-{name:"Z.P. HIGH SCHOOL PIMPALGAON", marathiName:"जि.प. उच्च प्राथमिक शाळा पिंपळगाव", udise:"27100503202", type:"ZP"},
-{name:"Z.P. SHIVAJI PRIMARY SCHOOL PIMPALGAON", marathiName:"जि.प. शिवाजी प्राथमिक शाळा पिंपळगाव", udise:"27100503203", type:"ZP"},
-{name:"SNEHA KANYA VIDYALAYA PIMPALGAON", marathiName:"स्नेह कन्या विद्यालय पिंपळगाव", udise:"27100503204", type:"Aided"},
-{name:"SKYWARD'S INTERNATIONAL SCHOOL PIMPALGAON", marathiName:"स्कायवर्ड्स इंटरनॅशनल स्कूल पिंपळगाव", udise:"27100503205", type:"Unaided"},
-{name:"Z.P. UPPER PRIMARY SCHOOL RENGEPAR(KOHALI)", marathiName:"जि.प. उच्च प्राथमिक शाळा रेंगेपार (कोहली)", udise:"27100503301", type:"ZP"},
-{name:"Z.P. PRIMARY SCHOOL SAMEWADA", marathiName:"जि.प. प्राथमिक शाळा सामेवाडा", udise:"27100503401", type:"ZP"},
-{name:"Z.P. PRIMARY SCHOOL KHAIRI", marathiName:"जि.प. प्राथमिक शाळा खैरी", udise:"27100503501", type:"ZP"},
-{name:"Z.P. UPPER PRIMARY SCHOOL MIREGAON", marathiName:"जि.प. उच्च प्राथमिक शाळा मिरेगाव", udise:"27100503601", type:"ZP"},
-{name:"SHUKRACHARYA VIDYALAYA MIREGAON", marathiName:"शुक्राचार्य विद्यालय मिरेगाव", udise:"27100503602", type:"Aided"}
+{ name:"Z.P. PRIMARY SCHOOL PIMPALGAON", marathiName:"जि.प. प्राथमिक शाळा पिंपळगाव", udise:"27100503201", type:"ZP" },
+{ name:"Z.P. HIGH SCHOOL PIMPALGAON", marathiName:"जि.प. उच्च प्राथमिक शाळा पिंपळगाव", udise:"27100503202", type:"ZP" },
+{ name:"Z.P. SHIVAJI PRIMARY SCHOOL PIMPALGAON", marathiName:"जि.प. शिवाजी प्राथमिक शाळा पिंपळगाव", udise:"27100503203", type:"ZP" },
+{ name:"SNEHA KANYA VIDYALAYA PIMPALGAON", marathiName:"स्नेह कन्या विद्यालय पिंपळगाव", udise:"27100503204", type:"Aided" },
+{ name:"SKYWARD'S INTERNATIONAL SCHOOL PIMPALGAON", marathiName:"स्कायवर्ड्स इंटरनॅशनल स्कूल पिंपळगाव", udise:"27100503205", type:"Unaided" },
+{ name:"Z.P. UPPER PRIMARY SCHOOL RENGEPAR(KOHALI)", marathiName:"जि.प. उच्च प्राथमिक शाळा रेंगेपार (कोहली)", udise:"27100503301", type:"ZP" },
+{ name:"Z.P. PRIMARY SCHOOL SAMEWADA", marathiName:"जि.प. प्राथमिक शाळा सामेवाडा", udise:"27100503401", type:"ZP" },
+{ name:"Z.P. PRIMARY SCHOOL KHAIRI", marathiName:"जि.प. प्राथमिक शाळा खैरी", udise:"27100503501", type:"ZP" },
+{ name:"Z.P. UPPER PRIMARY SCHOOL MIREGAON", marathiName:"जि.प. उच्च प्राथमिक शाळा मिरेगाव", udise:"27100503601", type:"ZP" },
+{ name:"SHUKRACHARYA VIDYALAYA MIREGAON", marathiName:"शुक्राचार्य विद्यालय मिरेगाव", udise:"27100503602", type:"Aided" }
 ];
 
 /* =========================================================
-    VARIABLES & EXCEL
+    VARIABLES
 ========================================================= */
 let currentLoggedInSchool="";
 let currentLoggedInMarathiName="";
@@ -658,72 +651,73 @@ let currentLoggedInUdise="";
 let currentSchoolType="";
 let isCRCAdmin=false;
 
-let globalExcelWorkbook = null;
-
+/* =========================================================
+    GOOGLE SCRIPT URL
+========================================================= */
 const GOOGLE_SCRIPT_WEB_URL= "https://script.google.com/macros/s/AKfycbwG9Fre-BZKtuXvBMbVXyhRu8r2M4TqDFYZkC0Ydy8og8oVxLqx4z8pmTClQIWkRtgX2A/exec";
 
 /* =========================================================
     STORAGE
 ========================================================= */
 function readStorage(key,fallback={}){
-    try{
-        const raw=localStorage.getItem(key);
-        if(!raw)return fallback;
-        return JSON.parse(raw);
-    }catch(e){ return fallback; }
+try{
+    const raw=localStorage.getItem(key);
+    if(!raw)return fallback;
+    return JSON.parse(raw);
+}catch(e){
+    return fallback;
 }
+}
+
 function writeStorage(key,value){
-    try{
-        localStorage.setItem(key,JSON.stringify(value));
-        return true;
-    }catch(e){
-        alert("⚠️ डेटा जतन करता आला नाही.");
-        return false;
-    }
+try{
+    localStorage.setItem(key,JSON.stringify(value));
+    return true;
+}catch(e){
+    alert("⚠️ डेटा जतन करता आला नाही.");
+    return false;
 }
+}
+
+/* =========================================================
+    PRELOAD DATABASE (From Excel generated JSON)
+========================================================= */
+const preloadedDatabase = {"Z.P. PRIMARY SCHOOL KHAIRI": {"Nursery": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "UKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "LKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१ ली": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 1, "sbc_g": 0, "obc_b": 0, "obc_g": 4, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.२ री": {"sc_b": 1, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 1, "sbc_g": 0, "obc_b": 0, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.३ री": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 3, "obc_g": 3, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.४ थी": {"sc_b": 1, "sc_g": 1, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 1, "sbc_g": 0, "obc_b": 0, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.५ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.६ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.७ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.८ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.९ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१० वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.11 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.12 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "एकूण": {"sc_b": 2, "sc_g": 1, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 3, "sbc_g": 0, "obc_b": 3, "obc_g": 9, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}}, "Z.P. SHIVAJI PRIMARY SCHOOL PIMPALGAON": {"Nursery": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "UKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "LKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१ ली": {"sc_b": 0, "sc_g": 1, "st_b": 0, "st_g": 0, "nt_b": 2, "nt_g": 2, "sbc_b": 0, "sbc_g": 1, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 4}, "इ.२ री": {"sc_b": 1, "sc_g": 1, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 1, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 2}, "इ.३ री": {"sc_b": 1, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 1, "nt_g": 1, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 2}, "इ.४ थी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 1, "nt_g": 1, "sbc_b": 0, "sbc_g": 1, "obc_b": 0, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 1}, "इ.५ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.६ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.७ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.८ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.९ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१० वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.11 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.12 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "एकूण": {"sc_b": 2, "sc_g": 2, "st_b": 0, "st_g": 0, "nt_b": 4, "nt_g": 4, "sbc_b": 0, "sbc_g": 2, "obc_b": 1, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 9}}, "Z.P. PRIMARY SCHOOL SAMEWADA": {"Nursery": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "UKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "LKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१ ली": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 1, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 1, "obc_g": 3, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 3}, "इ.२ री": {"sc_b": 0, "sc_g": 1, "st_b": 0, "st_g": 2, "nt_b": 0, "nt_g": 1, "sbc_b": 0, "sbc_g": 0, "obc_b": 1, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 1, "bpl": 3}, "इ.३ री": {"sc_b": 1, "sc_g": 0, "st_b": 0, "st_g": 1, "nt_b": 0, "nt_g": 3, "sbc_b": 0, "sbc_g": 0, "obc_b": 1, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 7}, "इ.४ थी": {"sc_b": 0, "sc_g": 3, "st_b": 1, "st_g": 0, "nt_b": 1, "nt_g": 1, "sbc_b": 0, "sbc_g": 0, "obc_b": 2, "obc_g": 3, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 10}, "इ.५ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.६ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.७ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.८ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.९ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१० वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.11 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.12 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "एकूण": {"sc_b": 1, "sc_g": 4, "st_b": 1, "st_g": 3, "nt_b": 2, "nt_g": 5, "sbc_b": 0, "sbc_g": 0, "obc_b": 5, "obc_g": 7, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 1, "bpl": 23}}, "Z.P. PRIMARY SCHOOL PIMPALGAON": {"Nursery": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "UKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "LKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१ ली": {"sc_b": 1, "sc_g": 1, "st_b": 1, "st_g": 0, "nt_b": 1, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 7, "obc_g": 3, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 1, "bpl": 13}, "इ.२ री": {"sc_b": 2, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 1, "sbc_g": 0, "obc_b": 4, "obc_g": 9, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 16}, "इ.३ री": {"sc_b": 1, "sc_g": 1, "st_b": 1, "st_g": 1, "nt_b": 2, "nt_g": 1, "sbc_b": 0, "sbc_g": 0, "obc_b": 8, "obc_g": 5, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 20}, "इ.४ थी": {"sc_b": 2, "sc_g": 0, "st_b": 2, "st_g": 2, "nt_b": 0, "nt_g": 2, "sbc_b": 0, "sbc_g": 0, "obc_b": 5, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 2, "bpl": 13}, "इ.५ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.६ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.७ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.८ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.९ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१० वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.11 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.12 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "एकूण": {"sc_b": 6, "sc_g": 2, "st_b": 4, "st_g": 3, "nt_b": 3, "nt_g": 3, "sbc_b": 1, "sbc_g": 0, "obc_b": 24, "obc_g": 17, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 3, "bpl": 62}}, "Z.P. UPPER PRIMARY SCHOOL RENGEPAR(KOHALI)": {"Nursery": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "UKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "LKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१ ली": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 2, "nt_g": 4, "sbc_b": 0, "sbc_g": 0, "obc_b": 3, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 1, "bpl": 9}, "इ.२ री": {"sc_b": 1, "sc_g": 1, "st_b": 0, "st_g": 0, "nt_b": 3, "nt_g": 3, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 9}, "इ.३ री": {"sc_b": 1, "sc_g": 0, "st_b": 1, "st_g": 2, "nt_b": 0, "nt_g": 2, "sbc_b": 0, "sbc_g": 0, "obc_b": 1, "obc_g": 2, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 6}, "इ.४ थी": {"sc_b": 0, "sc_g": 0, "st_b": 2, "st_g": 0, "nt_b": 3, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 1, "bpl": 6}, "इ.५ वी": {"sc_b": 0, "sc_g": 2, "st_b": 0, "st_g": 1, "nt_b": 2, "nt_g": 3, "sbc_b": 0, "sbc_g": 0, "obc_b": 3, "obc_g": 5, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 15}, "इ.६ वी": {"sc_b": 0, "sc_g": 0, "st_b": 1, "st_g": 2, "nt_b": 2, "nt_g": 2, "sbc_b": 0, "sbc_g": 0, "obc_b": 1, "obc_g": 3, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 11}, "इ.७ वी": {"sc_b": 0, "sc_g": 0, "st_b": 1, "st_g": 2, "nt_b": 2, "nt_g": 2, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 3, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 10}, "इ.८ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.९ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१० वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.11 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.12 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "एकूण": {"sc_b": 2, "sc_g": 3, "st_b": 5, "st_g": 7, "nt_b": 14, "nt_g": 16, "sbc_b": 0, "sbc_g": 0, "obc_b": 8, "obc_g": 15, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 2, "bpl": 66}}, "Z.P. UPPER PRIMARY SCHOOL MIREGAON": {"Nursery": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "UKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "LKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१ ली": {"sc_b": 1, "sc_g": 0, "st_b": 1, "st_g": 0, "nt_b": 2, "nt_g": 6, "sbc_b": 2, "sbc_g": 0, "obc_b": 1, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 6}, "इ.२ री": {"sc_b": 1, "sc_g": 0, "st_b": 1, "st_g": 0, "nt_b": 6, "nt_g": 3, "sbc_b": 3, "sbc_g": 0, "obc_b": 2, "obc_g": 4, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 1, "bpl": 12}, "इ.३ री": {"sc_b": 2, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 3, "nt_g": 7, "sbc_b": 1, "sbc_g": 0, "obc_b": 0, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 5}, "इ.४ थी": {"sc_b": 1, "sc_g": 1, "st_b": 1, "st_g": 2, "nt_b": 2, "nt_g": 4, "sbc_b": 1, "sbc_g": 2, "obc_b": 0, "obc_g": 2, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 4}, "इ.५ वी": {"sc_b": 0, "sc_g": 0, "st_b": 1, "st_g": 0, "nt_b": 4, "nt_g": 5, "sbc_b": 0, "sbc_g": 1, "obc_b": 2, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 1, "bpl": 6}, "इ.६ वी": {"sc_b": 0, "sc_g": 0, "st_b": 1, "st_g": 2, "nt_b": 8, "nt_g": 3, "sbc_b": 2, "sbc_g": 1, "obc_b": 1, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 12}, "इ.७ वी": {"sc_b": 1, "sc_g": 0, "st_b": 1, "st_g": 2, "nt_b": 4, "nt_g": 7, "sbc_b": 0, "sbc_g": 1, "obc_b": 2, "obc_g": 1, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 1, "divyang": 1, "bpl": 7}, "इ.८ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.९ वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१० वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.11 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.12 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "एकूण": {"sc_b": 6, "sc_g": 1, "st_b": 6, "st_g": 6, "nt_b": 29, "nt_g": 35, "sbc_b": 9, "sbc_g": 5, "obc_b": 8, "obc_g": 10, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 1, "divyang": 3, "bpl": 52}}, "Z.P. HIGH SCHOOL PIMPALGAON": {"Nursery": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "UKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "LKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१ ली": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.२ री": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.३ री": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.४ थी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.५ वी": {"sc_b": 3, "sc_g": 1, "st_b": 1, "st_g": 0, "nt_b": 5, "nt_g": 4, "sbc_b": 0, "sbc_g": 0, "obc_b": 10, "obc_g": 3, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.६ वी": {"sc_b": 2, "sc_g": 1, "st_b": 1, "st_g": 0, "nt_b": 7, "nt_g": 2, "sbc_b": 0, "sbc_g": 0, "obc_b": 8, "obc_g": 2, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.७ वी": {"sc_b": 2, "sc_g": 4, "st_b": 2, "st_g": 2, "nt_b": 2, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 10, "obc_g": 2, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.८ वी": {"sc_b": 4, "sc_g": 0, "st_b": 1, "st_g": 1, "nt_b": 4, "nt_g": 2, "sbc_b": 0, "sbc_g": 0, "obc_b": 8, "obc_g": 4, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.९ वी": {"sc_b": 3, "sc_g": 0, "st_b": 2, "st_g": 1, "nt_b": 7, "nt_g": 4, "sbc_b": 0, "sbc_g": 0, "obc_b": 13, "obc_g": 7, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१० वी": {"sc_b": 3, "sc_g": 2, "st_b": 1, "st_g": 1, "nt_b": 5, "nt_g": 1, "sbc_b": 0, "sbc_g": 0, "obc_b": 12, "obc_g": 4, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.11 वी": {"sc_b": 2, "sc_g": 0, "st_b": 1, "st_g": 3, "nt_b": 1, "nt_g": 3, "sbc_b": 0, "sbc_g": 3, "obc_b": 4, "obc_g": 6, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.12 वी": {"sc_b": 1, "sc_g": 0, "st_b": 0, "st_g": 1, "nt_b": 2, "nt_g": 2, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 2, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "एकूण": {"sc_b": 20, "sc_g": 8, "st_b": 9, "st_g": 9, "nt_b": 33, "nt_g": 18, "sbc_b": 0, "sbc_g": 3, "obc_b": 65, "obc_g": 30, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}}, "SNEHA KANYA VIDYALAYA PIMPALGAON": {"Nursery": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "UKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "LKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१ ली": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.२ री": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.३ री": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.४ थी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.५ वी": {"sc_b": 0, "sc_g": 1, "st_b": 0, "st_g": 1, "nt_b": 0, "nt_g": 4, "sbc_b": 0, "sbc_g": 1, "obc_b": 0, "obc_g": 14, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.६ वी": {"sc_b": 0, "sc_g": 9, "st_b": 0, "st_g": 4, "nt_b": 0, "nt_g": 5, "sbc_b": 0, "sbc_g": 2, "obc_b": 0, "obc_g": 12, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.७ वी": {"sc_b": 0, "sc_g": 2, "st_b": 0, "st_g": 4, "nt_b": 0, "nt_g": 4, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 12, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.८ वी": {"sc_b": 0, "sc_g": 6, "st_b": 0, "st_g": 2, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 2, "obc_b": 0, "obc_g": 9, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.९ वी": {"sc_b": 0, "sc_g": 3, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 3, "sbc_b": 0, "sbc_g": 2, "obc_b": 0, "obc_g": 17, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१० वी": {"sc_b": 0, "sc_g": 9, "st_b": 0, "st_g": 3, "nt_b": 0, "nt_g": 4, "sbc_b": 0, "sbc_g": 1, "obc_b": 0, "obc_g": 7, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.11 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.12 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "एकूण": {"sc_b": 0, "sc_g": 30, "st_b": 0, "st_g": 14, "nt_b": 0, "nt_g": 20, "sbc_b": 0, "sbc_g": 8, "obc_b": 0, "obc_g": 71, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}}, "SHUKRACHARYA VIDYALAYA MIREGAON": {"Nursery": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "UKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "LKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१ ली": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.२ री": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.३ री": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.४ थी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.५ वी": {"sc_b": 0, "sc_g": 0, "st_b": 3, "st_g": 3, "nt_b": 1, "nt_g": 3, "sbc_b": 1, "sbc_g": 2, "obc_b": 1, "obc_g": 5, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.६ वी": {"sc_b": 2, "sc_g": 1, "st_b": 3, "st_g": 1, "nt_b": 6, "nt_g": 4, "sbc_b": 6, "sbc_g": 3, "obc_b": 4, "obc_g": 7, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.७ वी": {"sc_b": 1, "sc_g": 1, "st_b": 2, "st_g": 3, "nt_b": 1, "nt_g": 3, "sbc_b": 0, "sbc_g": 4, "obc_b": 3, "obc_g": 2, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.८ वी": {"sc_b": 0, "sc_g": 0, "st_b": 1, "st_g": 2, "nt_b": 1, "nt_g": 2, "sbc_b": 2, "sbc_g": 2, "obc_b": 5, "obc_g": 7, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.९ वी": {"sc_b": 1, "sc_g": 4, "st_b": 2, "st_g": 5, "nt_b": 0, "nt_g": 4, "sbc_b": 3, "sbc_g": 3, "obc_b": 4, "obc_g": 2, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१० वी": {"sc_b": 4, "sc_g": 2, "st_b": 1, "st_g": 0, "nt_b": 4, "nt_g": 8, "sbc_b": 3, "sbc_g": 5, "obc_b": 7, "obc_g": 8, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.11 वी": {"sc_b": 1, "sc_g": 1, "st_b": 4, "st_g": 1, "nt_b": 5, "nt_g": 3, "sbc_b": 0, "sbc_g": 1, "obc_b": 13, "obc_g": 7, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.12 वी": {"sc_b": 4, "sc_g": 3, "st_b": 0, "st_g": 1, "nt_b": 6, "nt_g": 9, "sbc_b": 1, "sbc_g": 3, "obc_b": 6, "obc_g": 2, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "एकूण": {"sc_b": 13, "sc_g": 12, "st_b": 16, "st_g": 16, "nt_b": 24, "nt_g": 36, "sbc_b": 16, "sbc_g": 23, "obc_b": 43, "obc_g": 40, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}}, "SKYWARD'S INTERNATIONAL SCHOOL PIMPALGAON": {"Nursery": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "UKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "LKG": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१ ली": {"sc_b": 2, "sc_g": 5, "st_b": 0, "st_g": 1, "nt_b": 0, "nt_g": 1, "sbc_b": 0, "sbc_g": 0, "obc_b": 16, "obc_g": 15, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.२ री": {"sc_b": 2, "sc_g": 4, "st_b": 0, "st_g": 1, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 22, "obc_g": 12, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 1, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.३ री": {"sc_b": 1, "sc_g": 4, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 7, "obc_g": 9, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 1, "divyang": 0, "bpl": 0}, "इ.४ थी": {"sc_b": 2, "sc_g": 2, "st_b": 0, "st_g": 0, "nt_b": 1, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 9, "obc_g": 8, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 1, "divyang": 0, "bpl": 0}, "इ.५ वी": {"sc_b": 2, "sc_g": 4, "st_b": 0, "st_g": 0, "nt_b": 1, "nt_g": 1, "sbc_b": 0, "sbc_g": 0, "obc_b": 7, "obc_g": 17, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 2, "divyang": 1, "bpl": 0}, "इ.६ वी": {"sc_b": 6, "sc_g": 3, "st_b": 0, "st_g": 0, "nt_b": 1, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 13, "obc_g": 12, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 1, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.७ वी": {"sc_b": 1, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 4, "nt_g": 1, "sbc_b": 1, "sbc_g": 0, "obc_b": 8, "obc_g": 4, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 1, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.८ वी": {"sc_b": 2, "sc_g": 2, "st_b": 1, "st_g": 0, "nt_b": 2, "nt_g": 1, "sbc_b": 1, "sbc_g": 0, "obc_b": 3, "obc_g": 12, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 1, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.९ वी": {"sc_b": 5, "sc_g": 3, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 1, "obc_b": 1, "obc_g": 8, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.१० वी": {"sc_b": 1, "sc_g": 1, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 12, "obc_g": 7, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.11 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "इ.12 वी": {"sc_b": 0, "sc_g": 0, "st_b": 0, "st_g": 0, "nt_b": 0, "nt_g": 0, "sbc_b": 0, "sbc_g": 0, "obc_b": 0, "obc_g": 0, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 0, "open_g": 0, "divyang": 0, "bpl": 0}, "एकूण": {"sc_b": 24, "sc_g": 28, "st_b": 1, "st_g": 2, "nt_b": 9, "nt_g": 4, "sbc_b": 2, "sbc_g": 1, "obc_b": 98, "obc_g": 104, "vja_b": 0, "vja_g": 0, "ews_b": 0, "ews_g": 0, "open_b": 4, "open_g": 4, "divyang": 1, "bpl": 0}}};
 
 /* =========================================================
     START
 ========================================================= */
 window.addEventListener("DOMContentLoaded", function(){
+    
+    // Inject Preloaded Data if LocalStorage is Empty
+    let currentData = readStorage("schoolEnrolmentData", {});
+    if(Object.keys(currentData).length === 0) {
+        writeStorage("schoolEnrolmentData", preloadedDatabase);
+        console.log("Database initialized from Excel data.");
+    }
+    
     const code = document.getElementById("udiseCodeInput");
+
     code.addEventListener("input", function(){
         let value=this.value.replace(/\D/g,"");
         if(value.length>11) value=value.substring(0,11);
         this.value=value;
         showSchool(value);
     });
+
     code.addEventListener("keydown", function(e){
         if(e.key==="Enter") verifyUdiseCode();
     });
+
     syncFromGoogleSheet();
 });
-
-/* =========================================================
-    EXCEL UPLOAD HANDLING
-========================================================= */
-function handleExcelUpload(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    document.getElementById("excelStatus").innerText = "⏳ फाईल वाचत आहे...";
-    document.getElementById("excelStatus").style.color = "#2980b9";
-
-    reader.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        globalExcelWorkbook = XLSX.read(data, {type: 'array'});
-        document.getElementById("excelStatus").innerText = "✅ Excel फाईल यशस्वीरीत्या लोड झाली! आता खाली UDISE कोड टाका.";
-        document.getElementById("excelStatus").style.color = "#27ae60";
-    };
-    reader.readAsArrayBuffer(file);
-}
 
 /* =========================================================
     SHOW SCHOOL DYNAMICALLY
 ========================================================= */
 function showSchool(code){
     const box=document.getElementById("detectedSchoolNameDisplay");
+
     if(code==="9999"){
         box.style.display="block";
         box.style.background="#fff3cd";
@@ -731,11 +725,14 @@ function showSchool(code){
         box.innerHTML="🔑 CRC Admin Mode";
         return;
     }
+
     if(code.length<11){
         box.style.display="none";
         return;
     }
+
     const school = schoolsWithUdise.find(s=>s.udise===code);
+
     if(!school){
         box.style.display="block";
         box.style.background="#fdecea";
@@ -743,6 +740,7 @@ function showSchool(code){
         box.innerHTML="❌ या UDISE Code शी संबंधित शाळा उपलब्ध नाही.";
         return;
     }
+
     box.style.display="block";
     box.style.background="#e8f8f5";
     box.style.color="#117a65";
@@ -758,11 +756,15 @@ function showSchool(code){
 ========================================================= */
 function switchTab(n){
     if(!isCRCAdmin && (n===3 || n===4)) return;
+
     document.querySelectorAll(".page-section").forEach(x=>x.classList.remove("active"));
     document.querySelectorAll(".nav-tabs button").forEach(x=>x.classList.remove("active-tab"));
+
     document.getElementById("section"+n).classList.add("active");
     document.getElementById("tabBtn"+n).classList.add("active-tab");
+
     if(n===3 || n===4) renderAllGoshwaras();
+
     window.scrollTo({top:0, behavior:"smooth"});
 }
 
@@ -773,6 +775,7 @@ function verifyUdiseCode(){
     const code=document.getElementById("udiseCodeInput").value.trim();
     const error=document.getElementById("loginErrorMsg");
 
+    /* CRC ADMIN */
     if(code==="9999"){
         isCRCAdmin=true;
         currentLoggedInSchool="CRC_ADMIN";
@@ -784,17 +787,20 @@ function verifyUdiseCode(){
         return;
     }
 
+    /* 11 DIGITS */
     if(!/^\d{11}$/.test(code)){
         error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यक आहे.";
         return;
     }
 
     const school=schoolsWithUdise.find(s=>s.udise===code);
+
     if(!school){
         error.innerText="❌ या UDISE Code शी संबंधित शाळा उपलब्ध नाही.";
         return;
     }
 
+    /* LOGIN SUCCESS */
     isCRCAdmin=false;
     currentLoggedInSchool=school.name;
     currentLoggedInMarathiName=school.marathiName;
@@ -812,6 +818,7 @@ function verifyUdiseCode(){
         <span style="font-size:12px; color:#27ae60; font-weight:bold">${school.marathiName}</span><br>
         <span style="font-size:11px">UDISE Code : ${school.udise}</span>
     `;
+
     document.getElementById("loggedSchoolTopHeader").innerHTML=`
         🏫 ${school.name} (${school.marathiName})<br>
         <span style="font-size:11px">UDISE : ${school.udise}</span>
@@ -833,12 +840,15 @@ function logoutSchool(){
     currentLoggedInUdise="";
     currentSchoolType="";
     isCRCAdmin=false;
+
     document.getElementById("udiseCodeInput").value="";
     document.getElementById("detectedSchoolNameDisplay").style.display="none";
     document.getElementById("loggedSchoolTopHeader").style.display="none";
+    
     document.getElementById("tabBtn2").style.display="none";
     document.getElementById("tabBtn3").style.display="none";
     document.getElementById("tabBtn4").style.display="none";
+
     switchTab(0);
 }
 
@@ -903,11 +913,13 @@ function buildEnrolmentFormRows(school,locked=false){
 function calculateRowTotal(el){
     const cls=el.dataset.class;
     let b=0, g=0;
+
     document.querySelectorAll(`input[data-class="${cls}"]`).forEach(input=>{
         const value=parseInt(input.value||0);
         if(input.dataset.cat.endsWith("_b")) b+=value;
         if(input.dataset.cat.endsWith("_g")) g+=value;
     });
+
     document.getElementById(`tot_b_${cls}`).innerText=b;
     document.getElementById(`tot_g_${cls}`).innerText=g;
 }
@@ -918,8 +930,10 @@ function calculateRowTotal(el){
 function checkSchoolLockStatus(){
     const locks=readStorage("schoolLocksMap",{});
     const locked=locks["ALL_LOCKED"]||locks[currentLoggedInSchool]||false;
+    
     const notice=document.getElementById("lockNoticeBox");
     const buttons=document.getElementById("formButtonsArea");
+
     if(locked){
         notice.style.display="block";
         buttons.style.display="none";
@@ -931,67 +945,24 @@ function checkSchoolLockStatus(){
 }
 
 /* =========================================================
-    LOAD DATA (WITH EXCEL AUTO-FILL)
+    LOAD DATA
 ========================================================= */
 function loadSchoolEnrolmentData(){
     if(!currentLoggedInSchool) return;
-    const locked = checkSchoolLockStatus();
-    buildEnrolmentFormRows(currentLoggedInSchool, locked);
     
-    // १. आधी Local Storage मधील जुना डेटा लोड करणे
-    const all = readStorage("schoolEnrolmentData",{});
-    const records = all[currentLoggedInSchool];
-    if(records){
-        Object.keys(records).forEach(cls=>{
-            Object.keys(records[cls]).forEach(cat=>{
-                const input = document.querySelector(`input[data-class="${cls}"][data-cat="${cat}"]`);
-                if(input) input.value = records[cls][cat];
-            });
+    const locked=checkSchoolLockStatus();
+    buildEnrolmentFormRows(currentLoggedInSchool,locked);
+    
+    const all=readStorage("schoolEnrolmentData",{});
+    const records=all[currentLoggedInSchool];
+    if(!records)return;
+
+    Object.keys(records).forEach(cls=>{
+        Object.keys(records[cls]).forEach(cat=>{
+            const input=document.querySelector(`input[data-class="${cls}"][data-cat="${cat}"]`);
+            if(input) input.value=records[cls][cat];
         });
-    }
-
-    // २. जर Excel फाईल अपलोड केली असेल, तर Excel मधील डेटा फॉर्ममध्ये भरणे (Overwrite)
-    if (globalExcelWorkbook && currentLoggedInUdise && !locked) {
-        const sheetName = currentLoggedInUdise;
-        if (globalExcelWorkbook.SheetNames.includes(sheetName)) {
-            const worksheet = globalExcelWorkbook.Sheets[sheetName];
-            const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
-            
-            const excelColToCat = {
-                2: "sc_b", 3: "sc_g", 4: "st_b", 5: "st_g",
-                6: "nt_b", 7: "nt_g", 8: "sbc_b", 9: "sbc_g",
-                10: "obc_b", 11: "obc_g", 12: "vja_b", 13: "vja_g",
-                14: "ews_b", 15: "ews_g", 16: "open_b", 17: "open_g",
-                21: "divyang", 22: "bpl"
-            };
-
-            for (let i = 3; i < jsonData.length; i++) {
-                const row = jsonData[i];
-                if (!row || row.length === 0) continue;
-                
-                let classNameExcel = row[1];
-                if(!classNameExcel) continue;
-                classNameExcel = classNameExcel.toString().trim();
-                
-                let inputs = document.querySelectorAll(`input[data-class]`);
-                inputs.forEach(input => {
-                    if(input.dataset.class.includes(classNameExcel) || classNameExcel.includes(input.dataset.class)) {
-                        for (const [colIndex, catName] of Object.entries(excelColToCat)) {
-                            if (input.dataset.cat === catName) {
-                                let val = parseInt(row[colIndex]) || 0;
-                                input.value = val; 
-                            }
-                        }
-                    }
-                });
-            }
-            alert("📊 Excel फाईलमधून " + currentLoggedInSchool + " चा डेटा फॉर्ममध्ये आपोआप भरला गेला आहे! कृपया माहितीची खात्री करा आणि आवश्यक असल्यास बदल करून जतन (Save) करा.");
-        }
-    }
-
-    // सर्व आकडे भरल्यानंतर प्रत्येक ओळीची बेरीज करणे
-    getClassesForSchool(currentLoggedInSchool).forEach(cls=>{
-        const first = document.querySelector(`input[data-class="${cls}"]`);
+        const first=document.querySelector(`input[data-class="${cls}"]`);
         if(first) calculateRowTotal(first);
     });
 }
@@ -1001,6 +972,7 @@ function loadSchoolEnrolmentData(){
 ========================================================= */
 function reviewSchoolEnrolment(){
     if(!currentLoggedInSchool) return;
+    
     let total=0;
     getClassesForSchool(currentLoggedInSchool).forEach(cls=>{
         const b=parseInt(document.getElementById(`tot_b_${cls}`)?.innerText||0);
@@ -1008,7 +980,15 @@ function reviewSchoolEnrolment(){
         total+=b+g;
     });
 
-    if(confirm(`🏫 शाळा:\n${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nUDISE: ${currentLoggedInUdise}\n\n👨‍🎓 एकूण पटसंख्या: ${total}\n\nभरलेली माहिती योग्य आहे का?`)){
+    if(confirm(`🏫 शाळा:
+${currentLoggedInSchool}
+(${currentLoggedInMarathiName})
+
+UDISE: ${currentLoggedInUdise}
+
+👨‍🎓 एकूण पटसंख्या: ${total}
+
+भरलेली माहिती योग्य आहे का?`)){
         document.getElementById("finalSaveBtn").style.display="inline-block";
         alert("✅ माहितीची खात्री झाली आहे! आता 'पटसंख्या जतन करा' या हिरव्या बटनावर क्लिक करा.");
     }
@@ -1019,24 +999,33 @@ function reviewSchoolEnrolment(){
 ========================================================= */
 function saveSchoolEnrolment(){
     if(!currentLoggedInSchool) return;
+
     if(checkSchoolLockStatus()){
         alert("🔒 हा डेटा लॉक आहे.");
         return;
     }
+
     const all=readStorage("schoolEnrolmentData",{});
     const records={};
+
     getClassesForSchool(currentLoggedInSchool).forEach(cls=>{
         records[cls]={};
         document.querySelectorAll(`input[data-class="${cls}"]`).forEach(input=>{
             records[cls][input.dataset.cat]=parseInt(input.value||0);
         });
     });
+
     all[currentLoggedInSchool]=records;
     if(!writeStorage("schoolEnrolmentData",all)) return;
 
     syncToGoogleSheet(currentLoggedInSchool,records);
 
-    alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडत आहे.`);
+    alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!
+
+🏫 ${currentLoggedInSchool}
+(${currentLoggedInMarathiName})
+
+धन्यवाद! आता सिस्टीममधून बाहेर पडत आहे.`);
     logoutSchool();
 }
 
@@ -1049,11 +1038,14 @@ function toggleLockAllData(){
         if(pin!==null) alert("❌ चुकीचा पासवर्ड!");
         return;
     }
+    
     const locks=readStorage("schoolLocksMap",{});
     const newState=!locks["ALL_LOCKED"];
     locks["ALL_LOCKED"]=newState;
+    
     schoolsWithUdise.forEach(s=>{ locks[s.name]=newState; });
     writeStorage("schoolLocksMap",locks);
+    
     alert(newState ? "🔒 सर्व शाळांचा डेटा लॉक झाला." : "🔓 सर्व शाळांचा डेटा अनलॉक झाला.");
     renderAllGoshwaras();
 }
@@ -1082,7 +1074,7 @@ function syncFromGoogleSheet(){
     if(!GOOGLE_SCRIPT_WEB_URL) return;
     fetch(GOOGLE_SCRIPT_WEB_URL)
         .then(r=>r.json())
-        .then(data=>{ if(data) writeStorage("schoolEnrolmentData",data); })
+        .then(data=>{ if(data && Object.keys(data).length > 0) writeStorage("schoolEnrolmentData",data); })
         .catch(e=>console.log("Google Sync:",e));
 }
 
@@ -1092,6 +1084,7 @@ function syncFromGoogleSheet(){
 function getSchoolTotals(allData,school){
     let result={scB:0,scG:0,stB:0,stG:0,ntB:0,ntG:0,sbcB:0,sbcG:0,obcB:0,obcG:0,vjaB:0,vjaG:0,ewsB:0,ewsG:0,openB:0,openG:0,div:0,bpl:0};
     const records=allData[school.name]||{};
+    
     getClassesForSchool(school.name).forEach(cls=>{
         const r=records[cls]||{};
         result.scB+=Number(r.sc_b||0); result.scG+=Number(r.sc_g||0);
@@ -1104,6 +1097,7 @@ function getSchoolTotals(allData,school){
         result.openB+=Number(r.open_b||0); result.openG+=Number(r.open_g||0);
         result.div+=Number(r.divyang||0); result.bpl+=Number(r.bpl||0);
     });
+
     result.totalB=result.scB+result.stB+result.ntB+result.sbcB+result.obcB+result.vjaB+result.ewsB+result.openB;
     result.totalG=result.scG+result.stG+result.ntG+result.sbcG+result.obcG+result.vjaG+result.ewsG+result.openG;
     return result;
@@ -1113,6 +1107,7 @@ function renderCategoryTable(allData,type,tbodyId){
     const tbody=document.getElementById(tbodyId);
     tbody.innerHTML="";
     let no=1;
+
     schoolsWithUdise.filter(s=>s.type===type).forEach(school=>{
         const r=getSchoolTotals(allData,school);
         const tr=document.createElement("tr");
@@ -1132,9 +1127,11 @@ function renderMainGoshwara(allData){
     const tbody=document.getElementById("mainGoshwaraTbody");
     tbody.innerHTML="";
     let no=1;
+
     schoolsWithUdise.forEach(school=>{
         const r=getSchoolTotals(allData,school);
         let badge = school.type==="ZP" ? '<span class="badge zp">जि.प.</span>' : (school.type==="Aided" ? '<span class="badge aided">अनुदानित</span>' : '<span class="badge unaided">विनाअनुदानित</span>');
+        
         const tr=document.createElement("tr");
         tr.innerHTML=`
             <td>${no++}</td>
@@ -1153,12 +1150,15 @@ function renderTierGoshwara(allData,targetClasses,tbodyId){
     const tbody=document.getElementById(tbodyId);
     tbody.innerHTML="";
     let no=1;
+
     schoolsWithUdise.forEach(school=>{
         const classes=getClassesForSchool(school.name);
         const applicable=targetClasses.filter(c=>classes.includes(c));
         if(!applicable.length) return;
+
         let x={scB:0,scG:0,stB:0,stG:0,ntB:0,ntG:0,sbcB:0,sbcG:0,obcB:0,obcG:0,vjaB:0,vjaG:0,ewsB:0,ewsG:0,openB:0,openG:0};
         const records=allData[school.name]||{};
+
         applicable.forEach(cls=>{
             const r=records[cls]||{};
             x.scB+=Number(r.sc_b||0); x.scG+=Number(r.sc_g||0);
@@ -1170,8 +1170,10 @@ function renderTierGoshwara(allData,targetClasses,tbodyId){
             x.ewsB+=Number(r.ews_b||0); x.ewsG+=Number(r.ews_g||0);
             x.openB+=Number(r.open_b||0); x.openG+=Number(r.open_g||0);
         });
+
         const totalB=x.scB+x.stB+x.ntB+x.sbcB+x.obcB+x.vjaB+x.ewsB+x.openB;
         const totalG=x.scG+x.stG+x.ntG+x.sbcG+x.obcG+x.vjaG+x.ewsG+x.openG;
+
         const tr=document.createElement("tr");
         tr.innerHTML=`
             <td>${no++}</td>
@@ -1228,6 +1230,8 @@ function downloadSchoolPDF(){
         jsPDF:{unit:"mm",format:"a4",orientation:"landscape"}
     }).save();
 }
+
 </script>
+
 </body>
 </html>
