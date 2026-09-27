@@ -910,7 +910,7 @@ function syncToGoogleSheet(school, records) {
         const loader = document.getElementById("saveLoader");
         if(loader) loader.remove();
         
-        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडत आहे.`);
+        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडतতলা आहे.`);
         logoutSchool();
     });
 }
@@ -1256,14 +1256,23 @@ function buildEnrolmentFormRows(school,locked=false){
         tbody.appendChild(tr);
     });
 
-    // ★ नवीन तळाचा रकाना: एकूण पटसंख्या दर्शवण्यासाठी ★
+    // ★ नवीन तळाचा रकाना: सर्व जातीनुसार एकूण उभी बेरीज दर्शवण्यासाठी ★
     const tfoot = document.createElement("tr");
     tfoot.className = "entry-total-row";
     tfoot.innerHTML = `
-        <td colspan="18" style="text-align:right; font-weight:bold; padding-right:15px;">शाळेची एकूण पटसंख्या (Grand Total)</td>
+        <td colspan="2" style="text-align:right; font-weight:bold; padding-right:10px;">एकूण (Total):</td>
+        <td><span id="form_tot_sc_b">0</span></td><td><span id="form_tot_sc_g">0</span></td>
+        <td><span id="form_tot_st_b">0</span></td><td><span id="form_tot_st_g">0</span></td>
+        <td><span id="form_tot_nt_b">0</span></td><td><span id="form_tot_nt_g">0</span></td>
+        <td><span id="form_tot_sbc_b">0</span></td><td><span id="form_tot_sbc_g">0</span></td>
+        <td><span id="form_tot_obc_b">0</span></td><td><span id="form_tot_obc_g">0</span></td>
+        <td><span id="form_tot_vja_b">0</span></td><td><span id="form_tot_vja_g">0</span></td>
+        <td><span id="form_tot_ews_b">0</span></td><td><span id="form_tot_ews_g">0</span></td>
+        <td><span id="form_tot_open_b">0</span></td><td><span id="form_tot_open_g">0</span></td>
         <td class="total-b-cell"><span id="form_grand_tot_b">0</span></td>
         <td class="total-g-cell"><span id="form_grand_tot_g">0</span></td>
-        <td colspan="2"></td>
+        <td><span id="form_tot_divyang">0</span></td>
+        <td><span id="form_tot_bpl">0</span></td>
     `;
     tbody.appendChild(tfoot);
 }
@@ -1288,6 +1297,23 @@ function calculateRowTotal(el){
 }
 
 function updateFormGrandTotal() {
+    // सर्व जातीनुसार आणि इतर रकान्यांची उभी बेरीज
+    const categories = [
+        "sc_b", "sc_g", "st_b", "st_g", "nt_b", "nt_g", "sbc_b", "sbc_g", 
+        "obc_b", "obc_g", "vja_b", "vja_g", "ews_b", "ews_g", "open_b", "open_g", 
+        "divyang", "bpl"
+    ];
+    
+    categories.forEach(cat => {
+        let sum = 0;
+        document.querySelectorAll(`input[data-cat="${cat}"]`).forEach(input => {
+            sum += parseInt(input.value || 0);
+        });
+        const span = document.getElementById(`form_tot_${cat}`);
+        if(span) span.innerText = sum;
+    });
+
+    // एकूण मुले आणि एकूण मुली यांची उभी बेरीज
     let grandB = 0, grandG = 0;
     document.querySelectorAll('span[id^="tot_b_"]').forEach(span => {
         grandB += parseInt(span.innerText || 0);
@@ -1295,6 +1321,7 @@ function updateFormGrandTotal() {
     document.querySelectorAll('span[id^="tot_g_"]').forEach(span => {
         grandG += parseInt(span.innerText || 0);
     });
+    
     const formGtB = document.getElementById('form_grand_tot_b');
     const formGtG = document.getElementById('form_grand_tot_g');
     if(formGtB) formGtB.innerText = grandB;
