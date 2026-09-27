@@ -268,12 +268,21 @@ tbody tr:nth-child(even){
 }
 
 /* ★ शाळा लॉगिन फॉर्ममधील मुले/मुली एकूण रकाने डिझाईन ★ */
-td.total-b-cell {
+td.total-b-cell span, td.total-g-cell span {
+    display: inline-block;
+    width: 42px;
+    padding: 5px 2px;
+    text-align: center;
+    border: 1px solid #2980b9;
+    border-radius: 4px;
+    font-size: 12px;
     font-weight: bold;
+    background-color: #fff;
+}
+td.total-b-cell span {
     color: blue !important;
 }
-td.total-g-cell {
-    font-weight: bold;
+td.total-g-cell span {
     color: red !important;
 }
 .entry-total-row td {
@@ -1251,9 +1260,9 @@ function buildEnrolmentFormRows(school,locked=false){
     const tfoot = document.createElement("tr");
     tfoot.className = "entry-total-row";
     tfoot.innerHTML = `
-        <td colspan="18" style="text-align:right; padding-right:15px;">शाळेची एकूण पटसंख्या (Grand Total)</td>
-        <td class="total-b-cell" id="form_grand_tot_b">0</td>
-        <td class="total-g-cell" id="form_grand_tot_g">0</td>
+        <td colspan="18" style="text-align:right; font-weight:bold; padding-right:15px;">शाळेची एकूण पटसंख्या (Grand Total)</td>
+        <td class="total-b-cell"><span id="form_grand_tot_b">0</span></td>
+        <td class="total-g-cell"><span id="form_grand_tot_g">0</span></td>
         <td colspan="2"></td>
     `;
     tbody.appendChild(tfoot);
@@ -1838,7 +1847,7 @@ function renderAllGoshwaras(){
     renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी"],"g1_4Tbody");
     renderTierGoshwara(data,["इ.५ वी","इ.६ वी","इ.७ वी"],"g5_7Tbody");
     renderTierGoshwara(data,["इ.८ वी"],"g8Tbody");
-    renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ টান","इ.८ वी"],"g1_8Tbody");
+    renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी"],"g1_8Tbody");
     renderTierGoshwara(data,["इ.९ वी","इ.१० वी"],"g9_10Tbody");
     
     // Page 7 function call
