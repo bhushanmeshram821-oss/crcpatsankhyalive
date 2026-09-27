@@ -267,25 +267,6 @@ tbody tr:nth-child(even){
     border: 1px solid #2c3e50;
 }
 
-/* एकूण मुले आणि मुली रकान्यांसाठी नवीन स्टाईल (New Styles for Totals) */
-.total-boys-col {
-    background-color: #d4e6f1 !important;
-    width: 65px !important;
-    min-width: 65px !important;
-    color: #154360 !important;
-    font-size: 13px !important;
-    font-weight: bold !important;
-}
-
-.total-girls-col {
-    background-color: #fadbd8 !important;
-    width: 65px !important;
-    min-width: 65px !important;
-    color: #641e16 !important;
-    font-size: 13px !important;
-    font-weight: bold !important;
-}
-
 /* Clickable School Name */
 .clickable-school {
     color: #2980b9;
@@ -507,7 +488,7 @@ input.enrol-input:focus{
 <th colspan="2">SC</th><th colspan="2">ST</th><th colspan="2">NT</th><th colspan="2">SBC</th><th colspan="2">OBC</th><th colspan="2">VJ-A</th><th colspan="2">EWS</th><th colspan="2">Open</th><th colspan="2">एकूण</th><th rowspan="2">दिव्यांग</th><th rowspan="2">BPL</th>
 </tr>
 <tr>
-<th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th class="total-boys-col">मु.</th><th class="total-girls-col">मुली</th>
+<th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th><th>मु.</th><th>मुली</th>
 </tr>
 </thead>
 <tbody id="enrolmentTbody"></tbody>
@@ -779,7 +760,7 @@ input.enrol-input:focus{
             </thead>
             <tbody id="adminClassTbody"></tbody>
         </table>
-        </div>
+    </div>
     
     <div class="button-area">
         <button class="btn green" onclick="saveAdminClassMapping()">💾 सेटिंग जतन करा</button>
@@ -905,7 +886,7 @@ function syncToGoogleSheet(school, records) {
         const loader = document.getElementById("saveLoader");
         if(loader) loader.remove();
         
-        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडत ভাবনা करत आहे.`);
+        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडत आहे.`);
         logoutSchool();
     });
 }
@@ -1202,7 +1183,7 @@ function getClassesForSchool(name, ignoreMapping = false){
     }
     
     if(name.includes("SKYWARD")){
-        return ["Nursery","LKG","UKG","इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
+        return ["Nursery","LKG","UKG","इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ জিজ্ঞাসা","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
     }
     if(name.includes("HIGH SCHOOL")||name.includes("VIDYALAYA")){
         return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
@@ -1243,8 +1224,8 @@ function buildEnrolmentFormRows(school,locked=false){
             ${makeInput(cls,"vja_b",locked)} ${makeInput(cls,"vja_g",locked)}
             ${makeInput(cls,"ews_b",locked)} ${makeInput(cls,"ews_g",locked)}
             ${makeInput(cls,"open_b",locked)} ${makeInput(cls,"open_g",locked)}
-            <td class="total-boys-col"><span id="tot_b_${cls}">0</span></td>
-            <td class="total-girls-col"><span id="tot_g_${cls}">0</span></td>
+            <td style="width: 65px; min-width: 65px;"><span id="tot_b_${cls}" style="color: blue; font-size: 16px; font-weight: bold;">0</span></td>
+            <td style="width: 65px; min-width: 65px;"><span id="tot_g_${cls}" style="color: red; font-size: 16px; font-weight: bold;">0</span></td>
             ${makeInput(cls,"divyang",locked)}
             ${makeInput(cls,"bpl",locked)}
         `;
@@ -1759,7 +1740,7 @@ function renderSchoolwiseClassSummary(allData) {
                     <th>एकूण मुली</th>
                     <th>एकूण पटसंख्या</th>
                 </tr>
-                </thead>
+            </thead>
             <tbody>
     `;
     
