@@ -922,7 +922,7 @@ function syncBulkToGoogleSheet(allData, schoolsCount) {
     
     const loadingDiv = document.createElement("div");
     loadingDiv.id = "bulkSaveLoader";
-    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.8); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:18px; font-weight:bold; text-align:center; padding:20px;'><span style='font-size:40px; margin-bottom:10px;'>🚀</span> एक्सेल (Excel) मधील सर्व डेटा क्लाऊडवर (Live) पाठवला जात आहे...<br><br>कृपया थांबा, यास काही सेकंद लागू शकतात.</div>";
+    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.8); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:18px; font-weight:bold; text-align:center; padding:20px;'><span style='font-size:40px; margin-bottom:10px;'>🚀</span> एक्सेल (Excel) मधील सर्व डेटा क्लाऊडवर (Live) पाठवला जात आहे...<br><br>कृपया थांबा, यास काही सेक মিলিটারি लागू शकतात.</div>";
     document.body.appendChild(loadingDiv);
 
     fetch(GOOGLE_SCRIPT_WEB_URL, {
@@ -1281,8 +1281,8 @@ function buildEnrolmentFormRows(school,locked=false){
     // ★ नवीन तळाचा रकाना: शाळेची एकूण पटसंख्या (School Grand Total) दर्शवण्यासाठी ★
     const schoolTotalRow = document.createElement("tr");
     schoolTotalRow.innerHTML = `
-        <td colspan="18" style="text-align:right; font-weight:bold; padding-right:10px; background-color:#34495e; color:#ffffff; font-size:15px;">शाळेची एकूण पटसंख्या (Total Enrolment) :</td>
-        <td colspan="4" style="font-weight:bold; background-color:#34495e; color:#ffe66d; font-size:16px; text-align:center;"><span id="form_absolute_grand_total">0</span></td>
+        <td colspan="18" style="text-align:right; font-weight:bold; padding-right:10px; background-color:#2980b9; color:#ffffff; font-size:15px;">शाळेची एकूण पटसंख्या (Total Enrolment) :</td>
+        <td colspan="4" style="font-weight:bold; background-color:#2980b9; color:#ffe66d; font-size:16px; text-align:center;"><span id="form_absolute_grand_total">0</span></td>
     `;
     tbody.appendChild(schoolTotalRow);
 }
