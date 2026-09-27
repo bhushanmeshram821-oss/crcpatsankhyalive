@@ -6,8 +6,10 @@
 
 <title>शाळा पटसंख्या व गोषवारा प्रणाली - CRC पिंपळगाव/स.</title>
 
+<!-- External Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- नवीन: आलेखासाठी Chart.js -->
 
 <style>
 *{box-sizing:border-box}
@@ -403,12 +405,13 @@ input.enrol-input:focus{
 
 <!-- NAVIGATION -->
 <div class="nav-tabs">
-    <button id="tabBtn0" class="active-tab" onclick="switchTab(0)">🏠 स्वागत पेज 🏠</button>
+    <button id="tabBtn0" class="active-tab" onclick="switchTab(0)">🏠 स्वागत पेज</button>
     <button id="tabBtn1" style="display:none" onclick="switchTab(1)">🔐 UDISE लॉगिन</button>
     <button id="tabBtn2" style="display:none" onclick="switchTab(2)">📝 पटसंख्या भरणा</button>
     <button id="tabBtn3" style="display:none" onclick="switchTab(3)">📊 व्यवस्थापनानुसार गोषवारा</button>
     <button id="tabBtn4" style="display:none" onclick="switchTab(4)">📈 वर्गनिहाय गोषवारा</button>
     <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग (Admin)</button>
+    <button id="tabBtn6" style="display:none" onclick="switchTab(6)">📈 कल व आलेख (Trends)</button>
 </div>
 
 <!-- PAGE 0 : WELCOME PAGE -->
@@ -580,10 +583,9 @@ input.enrol-input:focus{
 <button class="btn red" onclick="downloadPDF('printArea2')">📄 PDF</button>
 </div>
 
-<!-- नवीन सुविधा: विविध वर्ग निवडून गोषवारे तयार करणे -->
 <div class="sub-title">★ स्वतःचा गोषवारा तयार करा (Custom Summary)</div>
 <div style="background:#e8f8f5; padding:15px; border-radius:8px; margin-bottom:20px; border:2px dashed #27ae60;">
-    <p style="margin-top:0; font-size:14px; font-weight:bold; color:#117a65;">कोणत्या इयत्तांचा एकत्रित गोषवारा पाहायचा ഇരുते निवडा:</p>
+    <p style="margin-top:0; font-size:14px; font-weight:bold; color:#117a65;">कोणत्या इयत्तांचा एकत्रित गोषवारा पाहायचा ते निवडा:</p>
     <div id="customClassCheckboxes" style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:15px;"></div>
     <button class="btn green" onclick="generateCustomSummary()">📊 गोषवारा तयार करा</button>
     <button class="btn blue" onclick="downloadExcel('customSummaryTable')">📥 Excel डाउनलोड</button>
@@ -681,7 +683,69 @@ input.enrol-input:focus{
     </div>
 
     <div class="page-nav">
-        <button onclick="switchTab(3)">⬅️ गोषवारा पहा</button>
+        <button onclick="switchTab(4)">⬅️ मागील पेज</button>
+        <button onclick="switchTab(6)">पुढील पेज ➡️</button>
+    </div>
+</section>
+
+<!-- PAGE 6 : TRENDS AND GRAPHS (नवीन पेज) -->
+<section id="section6" class="page-section">
+    <div class="sub-title">📈 महिना/वर्षवार पटसंख्या वाढ आणि घट (Trends & Graph)</div>
+    
+    <div style="background:#e8f8f5; padding:15px; border-radius:8px; margin-bottom:20px; border:2px dashed #27ae60;">
+        <h4 style="margin-top:0; color:#117a65;">१. सध्याचा डेटा जतन करा (Save Monthly Snapshot)</h4>
+        <p class="small-note">सध्या सिस्टीममध्ये असलेली पटसंख्या खालील महिन्यासाठी जतन करा.</p>
+        <select id="snapMonth" style="padding:5px; border-radius:4px;">
+            <option value="जानेवारी">जानेवारी</option><option value="फेब्रुवारी">फेब्रुवारी</option>
+            <option value="मार्च">मार्च</option><option value="एप्रिल">एप्रिल</option>
+            <option value="मे">मे</option><option value="जून">जून</option>
+            <option value="जुलै">जुलै</option><option value="ऑगस्ट">ऑगस्ट</option>
+            <option value="सप्टेंबर">सप्टेंबर</option><option value="ऑक्टोबर">ऑक्टोबर</option>
+            <option value="नोव्हेंबर">नोव्हेंबर</option><option value="डिसेंबर">डिसेंबर</option>
+        </select>
+        <select id="snapYear" style="padding:5px; border-radius:4px;">
+            <option value="2024">2024</option><option value="2025">2025</option>
+            <option value="2026">2026</option><option value="2027">2027</option>
+        </select>
+        <button class="btn green" onclick="saveTrendSnapshot()">💾 स्नॅपशॉट जतन करा</button>
+    </div>
+
+    <div style="background:#fcf3cf; padding:15px; border-radius:8px; margin-bottom:20px; border:2px dashed #f1c40f;">
+        <h4 style="margin-top:0; color:#b9770e;">२. दोन महिन्यांची तुलना करा (Compare & View Graph)</h4>
+        <label><b>बेस महिना (महिना १):</b></label> 
+        <select id="cmpMonth1" style="padding:5px; border-radius:4px; margin-right:15px;"></select>
+        <br><br>
+        <label><b>तुलना महिना (महिना २):</b></label> 
+        <select id="cmpMonth2" style="padding:5px; border-radius:4px; margin-right:15px;"></select>
+        <br><br>
+        <button class="btn blue" onclick="generateTrendReport()">📊 तुलना व आलेख पहा</button>
+    </div>
+
+    <div id="trendReportArea" style="display:none;">
+        <div class="sub-title">शाळा व केंद्रनिहाय वाढ/घट अहवाल</div>
+        <div class="table-responsive">
+            <table id="trendTable">
+                <thead>
+                    <tr>
+                        <th>अ.क्र.</th>
+                        <th>शाळेचे नाव</th>
+                        <th id="thMonth1">महिना १</th>
+                        <th id="thMonth2">महिना २</th>
+                        <th>वाढ (+)/ घट (-)</th>
+                    </tr>
+                </thead>
+                <tbody id="trendTbody"></tbody>
+            </table>
+        </div>
+
+        <div class="sub-title">📊 आलेख (Bar Chart)</div>
+        <div style="background:#fff; padding:15px; border-radius:8px; border:1px solid #ccc; max-width: 1000px; margin:auto;">
+            <canvas id="trendChartCanvas"></canvas>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <button onclick="switchTab(5)">⬅️ मागील पेज</button>
         <span></span>
     </div>
 </section>
@@ -805,7 +869,6 @@ function syncToGoogleSheet(school, records) {
     });
 }
 
-// नवीन फंक्शन: Excel चा सर्व डेटा एकदम क्लाऊडवर पाठवण्यासाठी
 function syncBulkToGoogleSheet(allData, schoolsCount) {
     if(!GOOGLE_SCRIPT_WEB_URL) return;
     
@@ -837,7 +900,6 @@ function syncBulkToGoogleSheet(allData, schoolsCount) {
         const loader = document.getElementById("bulkSaveLoader");
         if(loader) loader.remove();
         
-        // टेबल्स रिफ्रेश करा
         if(typeof renderAllGoshwaras === "function"){
             renderAllGoshwaras();
         }
@@ -936,7 +998,7 @@ function showSchool(code){
     TAB SWITCH
 ========================================================= */
 function switchTab(n){
-    if(!isCRCAdmin && (n===3 || n===4 || n===5)) return;
+    if(!isCRCAdmin && (n>=3)) return;
 
     document.querySelectorAll(".page-section").forEach(x=>x.classList.remove("active"));
     document.querySelectorAll(".nav-tabs button").forEach(x=>x.classList.remove("active-tab"));
@@ -949,6 +1011,7 @@ function switchTab(n){
         renderAllGoshwaras();
     }
     if(n===5) renderAdminClassSettings();
+    if(n===6) populateTrendDropdowns(); // नवीन टॅब
 
     window.scrollTo({top:0, behavior:"smooth"});
 }
@@ -966,16 +1029,18 @@ function verifyUdiseCode(){
         currentLoggedInSchool="CRC_ADMIN";
         currentLoggedInMarathiName="केंद्रप्रमुख ॲडमिन";
         currentLoggedInUdise="9999";
+        
         document.getElementById("tabBtn3").style.display="inline-block";
         document.getElementById("tabBtn4").style.display="inline-block";
         document.getElementById("tabBtn5").style.display="inline-block";
+        document.getElementById("tabBtn6").style.display="inline-block"; // दाखवा
         switchTab(3);
         return;
     }
 
     /* 11 DIGITS */
     if(!/^\d{11}$/.test(code)){
-        error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यक आहे.";
+        error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यक গান্ধे.";
         return;
     }
 
@@ -999,6 +1064,7 @@ function verifyUdiseCode(){
     document.getElementById("tabBtn3").style.display="none";
     document.getElementById("tabBtn4").style.display="none";
     document.getElementById("tabBtn5").style.display="none";
+    document.getElementById("tabBtn6").style.display="none";
 
     document.getElementById("authorizedSchoolName").innerHTML=`
         🏫 <b>${school.name}</b><br>
@@ -1036,6 +1102,7 @@ function logoutSchool(){
     document.getElementById("tabBtn3").style.display="none";
     document.getElementById("tabBtn4").style.display="none";
     document.getElementById("tabBtn5").style.display="none";
+    document.getElementById("tabBtn6").style.display="none";
 
     switchTab(0);
 }
@@ -1202,7 +1269,7 @@ function loadSchoolEnrolmentData(){
 }
 
 /* =========================================================
-    REVIEW DATA
+    REVIEW & SAVE DATA
 ========================================================= */
 function reviewSchoolEnrolment(){
     if(!currentLoggedInSchool) return;
@@ -1214,23 +1281,12 @@ function reviewSchoolEnrolment(){
         total+=b+g;
     });
 
-    if(confirm(`🏫 शाळा:
-${currentLoggedInSchool}
-(${currentLoggedInMarathiName})
-
-UDISE: ${currentLoggedInUdise}
-
-👨‍🎓 एकूण पटसंख्या: ${total}
-
-भरलेली माहिती योग्य आहे का?`)){
+    if(confirm(`🏫 शाळा:\n${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nUDISE: ${currentLoggedInUdise}\n\n👨‍🎓 एकूण पटसंख्या: ${total}\n\nभरलेली माहिती योग्य आहे का?`)){
         document.getElementById("finalSaveBtn").style.display="inline-block";
         alert("✅ माहितीची खात्री झाली आहे! आता 'पटसंख्या जतन करा' या हिरव्या बटनावर क्लिक करा.");
     }
 }
 
-/* =========================================================
-    SAVE DATA
-========================================================= */
 function saveSchoolEnrolment(){
     if(!currentLoggedInSchool) return;
 
@@ -1551,9 +1607,6 @@ function renderTierGoshwara(allData,targetClasses,tbodyId, tableId){
     if (no > 1) appendGrandTotalRow(tbody, gt, "एकूण (Grand Total)", 2, false);
 }
 
-/* =========================================================
-    CUSTOM SUMMARY GENERATOR
-========================================================= */
 function renderCustomClassCheckboxes() {
     const container = document.getElementById("customClassCheckboxes");
     container.innerHTML = allClassesList.map(cls => 
@@ -1618,9 +1671,6 @@ function downloadSchoolPDF(){
     }).save();
 }
 
-/* =========================================================
-    EXCEL BULK UPLOAD FACILITY 
-========================================================= */
 function normalizeClassName(cls) {
     if(!cls) return "";
     cls = cls.trim();
@@ -1684,10 +1734,7 @@ function handleExcelUpload(event) {
             schoolsUpdated++;
         });
 
-        // 1. डेटा LocalStorage मध्ये सेव्ह करा
         writeStorage("schoolEnrolmentData", allData);
-        
-        // 2. संपूर्ण डेटा Google Sheet (Cloud) वर पाठवा
         syncBulkToGoogleSheet(allData, schoolsUpdated);
         
         event.target.value = "";
@@ -1696,6 +1743,164 @@ function handleExcelUpload(event) {
     reader.readAsArrayBuffer(file);
 }
 
+/* =========================================================
+    TRENDS AND GRAPHS LOGIC (नवीन कोड)
+========================================================= */
+let trendChartInstance = null;
+
+function saveTrendSnapshot() {
+    const month = document.getElementById("snapMonth").value;
+    const year = document.getElementById("snapYear").value;
+    const key = `${month} ${year}`;
+    
+    const allData = readStorage("schoolEnrolmentData", {});
+    const history = readStorage("historicalEnrolmentData", {});
+    
+    let snapshot = { CRC_TOTAL: 0, schools: {} };
+
+    schoolsWithUdise.forEach(school => {
+        let totals = getSchoolTotals(allData, school);
+        let t = totals.totalB + totals.totalG;
+        snapshot.schools[school.name] = t;
+        snapshot.CRC_TOTAL += t;
+    });
+
+    history[key] = snapshot;
+    writeStorage("historicalEnrolmentData", history);
+
+    alert(`✅ सद्यस्थितीतील पटसंख्या "${key}" या महिन्यासाठी जतन झाली आहे!`);
+    populateTrendDropdowns();
+}
+
+function populateTrendDropdowns() {
+    const history = readStorage("historicalEnrolmentData", {});
+    const keys = Object.keys(history);
+    
+    const sel1 = document.getElementById("cmpMonth1");
+    const sel2 = document.getElementById("cmpMonth2");
+    
+    sel1.innerHTML = "";
+    sel2.innerHTML = "";
+
+    if (keys.length === 0) {
+        sel1.innerHTML = `<option value="">नोंद उपलब्ध नाही</option>`;
+        sel2.innerHTML = `<option value="">नोंद उपलब्ध नाही</option>`;
+        return;
+    }
+
+    keys.forEach(k => {
+        sel1.innerHTML += `<option value="${k}">${k}</option>`;
+        sel2.innerHTML += `<option value="${k}">${k}</option>`;
+    });
+
+    // जर २ किंवा जास्त नोंदी असतील, तर महिना २ ला शेवटची नोंद निवडा
+    if(keys.length >= 2) {
+        sel1.value = keys[0];
+        sel2.value = keys[keys.length - 1];
+    }
+}
+
+function generateTrendReport() {
+    const m1 = document.getElementById("cmpMonth1").value;
+    const m2 = document.getElementById("cmpMonth2").value;
+    
+    if(!m1 || !m2) {
+        alert("⚠️ कृपया तुलना करण्यासाठी दोन्ही महिने निवडा. (स्नॅपशॉट जतन केले नसल्यास आधी जतन करा)");
+        return;
+    }
+
+    const history = readStorage("historicalEnrolmentData", {});
+    const d1 = history[m1];
+    const d2 = history[m2];
+
+    document.getElementById("thMonth1").innerText = m1;
+    document.getElementById("thMonth2").innerText = m2;
+
+    const tbody = document.getElementById("trendTbody");
+    tbody.innerHTML = "";
+
+    let labels = [];
+    let data1 = [];
+    let data2 = [];
+
+    let no = 1;
+
+    schoolsWithUdise.forEach(school => {
+        let val1 = d1.schools[school.name] || 0;
+        let val2 = d2.schools[school.name] || 0;
+        let diff = val2 - val1;
+        
+        let diffHtml = diff > 0 ? `<span style="color:green;font-weight:bold;">+${diff} (वाढ)</span>` : 
+                       (diff < 0 ? `<span style="color:red;font-weight:bold;">${diff} (घट)</span>` : `<span style="color:gray;">० (समान)</span>`);
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${no++}</td>
+                <td style="text-align:left;"><b>${school.name}</b><br><span style="font-size:10px;color:#27ae60">${school.marathiName}</span></td>
+                <td><b>${val1}</b></td>
+                <td><b>${val2}</b></td>
+                <td>${diffHtml}</td>
+            </tr>
+        `;
+
+        labels.push(school.marathiName.replace("जि.प. प्राथमिक शाळा", "जि.प.प्रा.").replace("जि.प. उच्च प्राथमिक शाळा", "जि.प.उ.प्रा."));
+        data1.push(val1);
+        data2.push(val2);
+    });
+
+    // CRC Total Row
+    let crcDiff = d2.CRC_TOTAL - d1.CRC_TOTAL;
+    let crcDiffHtml = crcDiff > 0 ? `<span style="color:green;font-weight:bold;">+${crcDiff} (वाढ)</span>` : 
+                      (crcDiff < 0 ? `<span style="color:red;font-weight:bold;">${crcDiff} (घट)</span>` : `<span style="color:gray;">० (समान)</span>`);
+
+    tbody.innerHTML += `
+        <tr class="grand-total-row">
+            <td colspan="2" style="text-align:right"><b>संपूर्ण केंद्र (CRC Total)</b></td>
+            <td><b>${d1.CRC_TOTAL}</b></td>
+            <td><b>${d2.CRC_TOTAL}</b></td>
+            <td><b>${crcDiffHtml}</b></td>
+        </tr>
+    `;
+
+    document.getElementById("trendReportArea").style.display = "block";
+
+    // Chart.js Graph Drawing
+    const ctx = document.getElementById("trendChartCanvas").getContext("2d");
+    if(trendChartInstance) {
+        trendChartInstance.destroy();
+    }
+
+    trendChartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: m1 + ' पटसंख्या',
+                    data: data1,
+                    backgroundColor: '#3498db',
+                    borderRadius: 4
+                },
+                {
+                    label: m2 + ' पटसंख्या',
+                    data: data2,
+                    backgroundColor: '#2ecc71',
+                    borderRadius: 4
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'top' },
+                title: {
+                    display: true,
+                    text: 'शाळानिहाय दोन महिन्यांची तुलनात्मक पटसंख्या'
+                }
+            }
+        }
+    });
+}
 </script>
 
 </body>
