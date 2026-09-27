@@ -1401,6 +1401,7 @@ function handleExcelUpload(event) {
         const data = new Uint8Array(e.target.result);
         const workbook = XLSX.read(data, {type: 'array'});
         
+        // आधीचा असलेला डेटा मिळवा जेणेकरून तो डिलीट होणार नाही
         let allData = readStorage("schoolEnrolmentData", {});
         let schoolsUpdated = 0;
 
@@ -1413,7 +1414,8 @@ function handleExcelUpload(event) {
             const worksheet = workbook.Sheets[sheetName];
             const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1}); 
             
-            let records = {};
+            // जर शाळेचा डेटा आधीच असेल तर तो तसाच ठेवा, नसेल तर नवीन ऑब्जेक्ट तयार करा
+            let records = allData[school.name] || {};
             
             for(let i = 3; i < jsonData.length; i++) {
                 const row = jsonData[i];
@@ -1424,6 +1426,7 @@ function handleExcelUpload(event) {
                 
                 let cls = normalizeClassName(rawCls);
 
+                // जुन्या डेटावर नवीन डेटा ओव्हरराईट करा
                 records[cls] = {
                     sc_b: parseInt(row[2]) || 0, sc_g: parseInt(row[3]) || 0,
                     st_b: parseInt(row[4]) || 0, st_g: parseInt(row[5]) || 0,
@@ -1442,8 +1445,9 @@ function handleExcelUpload(event) {
             schoolsUpdated++;
         });
 
+        // अपडेट झालेला डेटा कायमस्वरूपी सेव्ह करा
         writeStorage("schoolEnrolmentData", allData);
-        alert(`✅ यशस्वी! एकूण ${schoolsUpdated} शाळांचा डेटा Excel मधून अपलोड झाला आहे.`);
+        alert(`✅ यशस्वी! एकूण ${schoolsUpdated} शाळांचा डेटा Excel मधून अपलोड आणि जतन झाला आहे.`);
         
         if(typeof renderAllGoshwaras === "function"){
             renderAllGoshwaras();
