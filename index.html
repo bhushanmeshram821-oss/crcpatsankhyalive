@@ -198,7 +198,7 @@ body{
     margin-bottom:12px;
     color:#117a65;
     font-weight:bold;
-    text-align:right;
+    text-align:center; /* Right वरून Center केले */
     box-shadow:0 3px 10px rgba(0,0,0,.12);
 }
 
@@ -1089,7 +1089,7 @@ function verifyUdiseCode(){
 
     /* 11 DIGITS */
     if(!/^\d{11}$/.test(code)){
-        error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यक आहे.";
+        error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यक কাশী असणे आवश्यक आहे.";
         return;
     }
 
@@ -1116,15 +1116,13 @@ function verifyUdiseCode(){
     document.getElementById("tabBtn6").style.display="none";
     document.getElementById("tabBtn7").style.display="none";
 
+    /* ★ Changed from multiple lines (<br>) to single line as requested ★ */
     document.getElementById("authorizedSchoolName").innerHTML=`
-        🏫 <b>${school.name}</b><br>
-        <span style="font-size:12px; color:#27ae60; font-weight:bold">${school.marathiName}</span><br>
-        <span style="font-size:11px">UDISE Code : ${school.udise}</span>
+        🏫 <b>${school.name}</b> <span style="font-size:12px; color:#27ae60; font-weight:bold">(${school.marathiName})</span> | <span style="font-size:11px">UDISE Code : ${school.udise}</span>
     `;
 
     document.getElementById("loggedSchoolTopHeader").innerHTML=`
-        🏫 ${school.name} (${school.marathiName})<br>
-        <span style="font-size:11px">UDISE : ${school.udise}</span>
+        🏫 ${school.name} (${school.marathiName}) | <span style="font-size:11px">UDISE : ${school.udise}</span>
     `;
 
     document.getElementById("finalSaveBtn").style.display="none";
