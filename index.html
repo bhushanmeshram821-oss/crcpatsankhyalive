@@ -438,7 +438,8 @@ input.enrol-input:focus{
     <button id="tabBtn4" style="display:none" onclick="switchTab(4)">📈 वर्गनिहाय गोषवारा</button>
     <button id="tabBtn7" style="display:none" onclick="switchTab(7)">🏫 शाळानिहाय गोषवारा</button>
     <button id="tabBtn8" style="display:none" onclick="switchTab(8)">🏫 शाळा व वर्ग निवड</button>
-    <button id="tabBtn9" style="display:none" onclick="switchTab(9)">🏫 सानुकूल शाळा गोषवारा</button> <!-- NEW PAGE 9 BUTTON -->
+    <button id="tabBtn9" style="display:none" onclick="switchTab(9)">🏫 सानुकूल शाळा गोषवारा</button>
+    <button id="tabBtn10" style="display:none" onclick="switchTab(10)">🏫 निवडक वर्ग गोषवारा</button> <!-- NEW PAGE 10 BUTTON -->
     <button id="tabBtn6" style="display:none" onclick="switchTab(6)">📈 कल व आलेख</button>
     <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग</button>
 </div>
@@ -756,11 +757,11 @@ input.enrol-input:focus{
 
     <div class="page-nav">
         <button onclick="switchTab(7)">⬅️ मागील पेज</button>
-        <button onclick="switchTab(9)">पुढील पेज ➡️</button> <!-- NEW PAGE 9 LINK -->
+        <button onclick="switchTab(9)">पुढील पेज ➡️</button>
     </div>
 </section>
 
-<!-- PAGE 9 : NEW - MULTI-SCHOOL MULTI-CLASS SUMMARY -->
+<!-- PAGE 9 : MULTI-SCHOOL MULTI-CLASS SUMMARY -->
 <section id="section9" class="page-section">
     <div class="button-area">
         <button class="btn blue" onclick="downloadExcel('p9Table')">📊 Excel डाउनलोड</button>
@@ -806,6 +807,52 @@ input.enrol-input:focus{
 
     <div class="page-nav">
         <button onclick="switchTab(8)">⬅️ मागील पेज</button>
+        <button onclick="switchTab(10)">पुढील पेज ➡️</button> <!-- NEW PAGE 10 LINK -->
+    </div>
+</section>
+
+<!-- PAGE 10 : NEW - CLASS FILTERED SCHOOL SUMMARY -->
+<section id="section10" class="page-section">
+    <div class="button-area">
+        <button class="btn blue" onclick="downloadExcel('p10Table')">📊 Excel डाउनलोड</button>
+        <button class="btn red" onclick="downloadPDF('p10PrintArea')">📄 PDF डाउनलोड</button>
+    </div>
+
+    <div class="sub-title">★ निवडक वर्गानुसार शाळानिहाय गोषवारा (Class Filtered School Summary)</div>
+    <div style="background:#e8f8f5; padding:15px; border-radius:8px; margin-bottom:20px; border:2px dashed #27ae60;">
+        <p class="small-note" style="margin-top:0;">येथे हवे ते वर्ग निवडा. सर्व शाळांची यादी आणि त्यांच्यासमोर तुम्ही निवडलेल्या वर्गांची एकत्रित पटसंख्या दिसेल.</p>
+        
+        <label><b>वर्ग निवडा (Select Classes):</b></label><br>
+        <button type="button" style="margin:5px 5px 5px 0; font-size:11px; padding:4px 8px; cursor:pointer; background:#34495e; color:#fff; border:none; border-radius:3px;" onclick="p10ToggleAllClasses(true)">✅ सर्व निवडा</button>
+        <button type="button" style="margin:5px 0; font-size:11px; padding:4px 8px; cursor:pointer; background:#e74c3c; color:#fff; border:none; border-radius:3px;" onclick="p10ToggleAllClasses(false)">❌ सर्व काढा</button>
+        <div id="p10ClassCheckboxes" style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:15px; margin-top:5px; background:#fff; padding:10px; border-radius:5px; border:1px solid #ccc;"></div>
+
+        <button class="btn green" onclick="p10GenerateReport()" style="width:100%;">📊 गोषवारा पहा (Generate Report)</button>
+    </div>
+
+    <div id="p10PrintArea" style="background:#fff; padding:15px; border-radius:8px;">
+        <h3 id="p10ReportTitle" style="text-align:center; color:#2980b9; margin-top:0; margin-bottom:15px;">निवडक वर्गांचा शाळानिहाय गोषवारा</h3>
+        <div class="table-responsive">
+            <table id="p10Table">
+                <thead>
+                    <tr>
+                        <th>अ.क्र.</th>
+                        <th>शाळेचे नाव</th>
+                        <th>निवडलेले वर्ग</th>
+                        <th>एकूण मुले</th>
+                        <th>एकूण मुली</th>
+                        <th>एकूण पटसंख्या</th>
+                    </tr>
+                </thead>
+                <tbody id="p10Tbody">
+                    <tr><td colspan="6" style="color:#7f8c8d;"><i>(गोषवारा पाहण्यासाठी वर्ग निवडून 'गोषवारा पहा' वर क्लिक करा)</i></td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <button onclick="switchTab(9)">⬅️ मागील पेज</button>
         <button onclick="switchTab(6)">पुढील पेज ➡️</button>
     </div>
 </section>
@@ -867,7 +914,7 @@ input.enrol-input:focus{
     </div>
 
     <div class="page-nav">
-        <button onclick="switchTab(9)">⬅️ मागील पेज</button> <!-- NEW PAGE 9 LINK -->
+        <button onclick="switchTab(10)">⬅️ मागील पेज</button> <!-- UPDATE BACK TO P10 -->
         <button onclick="switchTab(5)">पुढील पेज ➡️</button>
     </div>
 </section>
@@ -1014,7 +1061,7 @@ function syncToGoogleSheet(school, records) {
         const loader = document.getElementById("saveLoader");
         if(loader) loader.remove();
         
-        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडत आहे.`);
+        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडतতলা आहत.`);
         logoutSchool();
     });
 }
@@ -1156,14 +1203,15 @@ function switchTab(n){
     document.getElementById("section"+n).classList.add("active");
     document.getElementById("tabBtn"+n).classList.add("active-tab");
 
-    if(n===3 || n===4 || n===7 || n===8 || n===9) {
+    if(n===3 || n===4 || n===7 || n===8 || n===9 || n===10) {
         syncFromGoogleSheet();
         renderAllGoshwaras();
     }
     if(n===5) renderAdminClassSettings();
     if(n===6) populateTrendDropdowns();
     if(n===8) p8Init(); 
-    if(n===9) p9Init(); // Initialize NEW Page 9
+    if(n===9) p9Init(); 
+    if(n===10) p10Init(); // Initialize NEW Page 10
 
     window.scrollTo({top:0, behavior:"smooth"});
 }
@@ -1186,7 +1234,8 @@ function verifyUdiseCode(){
         document.getElementById("tabBtn4").style.display="inline-block";
         document.getElementById("tabBtn7").style.display="inline-block";
         document.getElementById("tabBtn8").style.display="inline-block";
-        document.getElementById("tabBtn9").style.display="inline-block"; // New Page 9
+        document.getElementById("tabBtn9").style.display="inline-block";
+        document.getElementById("tabBtn10").style.display="inline-block"; // New Page 10
         document.getElementById("tabBtn6").style.display="inline-block";
         document.getElementById("tabBtn5").style.display="inline-block";
         switchTab(3);
@@ -1222,7 +1271,8 @@ function verifyUdiseCode(){
     document.getElementById("tabBtn6").style.display="none";
     document.getElementById("tabBtn7").style.display="none";
     document.getElementById("tabBtn8").style.display="none";
-    document.getElementById("tabBtn9").style.display="none"; // New Page 9
+    document.getElementById("tabBtn9").style.display="none";
+    document.getElementById("tabBtn10").style.display="none"; // New Page 10
 
     document.getElementById("authorizedSchoolName").innerHTML=`
         🏫 <b>${school.name}</b><br>
@@ -1262,7 +1312,8 @@ function logoutSchool(){
     document.getElementById("tabBtn6").style.display="none";
     document.getElementById("tabBtn7").style.display="none";
     document.getElementById("tabBtn8").style.display="none";
-    document.getElementById("tabBtn9").style.display="none"; // New Page 9
+    document.getElementById("tabBtn9").style.display="none";
+    document.getElementById("tabBtn10").style.display="none"; // New Page 10
 
     switchTab(0);
 }
@@ -2356,7 +2407,7 @@ function p8GenerateReport() {
 }
 
 /* =========================================================
-    PAGE 9: NEW - MULTI-SCHOOL MULTI-CLASS SUMMARY LOGIC
+    PAGE 9: MULTI-SCHOOL MULTI-CLASS SUMMARY LOGIC
 ========================================================= */
 function p9Init() {
     const schoolContainer = document.getElementById("p9SchoolCheckboxes");
@@ -2441,6 +2492,88 @@ function p9GenerateReport() {
     tbody.innerHTML += `
         <tr class="grand-total-row">
             <td colspan="2" style="text-align:right; padding-right:10px;"><b>एकूण बेरीज (Grand Total)</b></td>
+            <td><b>${grandBoys}</b></td>
+            <td><b>${grandGirls}</b></td>
+            <td><b>${grandBoys + grandGirls}</b></td>
+        </tr>
+    `;
+}
+
+/* =========================================================
+    PAGE 10: NEW - CLASS FILTERED SCHOOL SUMMARY LOGIC
+========================================================= */
+function p10Init() {
+    const classContainer = document.getElementById("p10ClassCheckboxes");
+    
+    if (classContainer.innerHTML === "") {
+        allClassesList.forEach(cls => {
+            classContainer.innerHTML += `<label style="cursor:pointer; display:inline-flex; align-items:center; background:#f9f9f9; padding:4px 8px; border-radius:4px; border:1px solid #ddd; font-size:12px;"><input type="checkbox" value="${cls}" class="p10-cls-cb" style="margin-right:5px;"> ${cls}</label>`;
+        });
+    }
+}
+
+function p10ToggleAllClasses(check) {
+    document.querySelectorAll('.p10-cls-cb').forEach(cb => cb.checked = check);
+}
+
+function p10GenerateReport() {
+    const checkedClasses = Array.from(document.querySelectorAll('.p10-cls-cb:checked')).map(cb => cb.value);
+
+    if(checkedClasses.length === 0) {
+        alert("कृपया गोषवारा पाहण्यासाठी किमान एक वर्ग निवडा!"); 
+        return;
+    }
+
+    const allData = readStorage("schoolEnrolmentData", {});
+    const tbody = document.getElementById("p10Tbody");
+    tbody.innerHTML = "";
+
+    let grandBoys = 0;
+    let grandGirls = 0;
+    let no = 1;
+
+    schoolsWithUdise.forEach(school => {
+        const records = allData[school.name] || {};
+        const availableClassesForSchool = getClassesForSchool(school.name);
+        
+        // Select classes that the user checked AND the school actually has
+        const classesToCount = checkedClasses.filter(c => availableClassesForSchool.includes(c));
+
+        if(classesToCount.length === 0) return; // Skip school if no matched classes
+
+        let bTotal = 0, gTotal = 0;
+
+        classesToCount.forEach(cls => {
+            const r = records[cls] || {};
+            bTotal += Number(r.sc_b||0) + Number(r.st_b||0) + Number(r.nt_b||0) + Number(r.sbc_b||0) + Number(r.obc_b||0) + Number(r.vja_b||0) + Number(r.ews_b||0) + Number(r.open_b||0);
+            gTotal += Number(r.sc_g||0) + Number(r.st_g||0) + Number(r.nt_g||0) + Number(r.sbc_g||0) + Number(r.obc_g||0) + Number(r.vja_g||0) + Number(r.ews_g||0) + Number(r.open_g||0);
+        });
+
+        const selectedClassesStr = classesToCount.join(", ");
+
+        tbody.innerHTML += `
+            <tr>
+                <td>${no++}</td>
+                <td style="text-align:left;"><b>${school.name}</b><br><span style="font-size:10px; color:#27ae60">${school.marathiName}</span></td>
+                <td style="color:#8e44ad; font-weight:bold;">${selectedClassesStr}</td>
+                <td>${bTotal}</td>
+                <td>${gTotal}</td>
+                <td><b>${bTotal + gTotal}</b></td>
+            </tr>
+        `;
+
+        grandBoys += bTotal;
+        grandGirls += gTotal;
+    });
+
+    if(no === 1) {
+        tbody.innerHTML = `<tr><td colspan="6" style="color:#e74c3c; font-weight:bold;">निवडलेल्या वर्गांसाठी कोणत्याही शाळेत माहिती उपलब्ध नाही.</td></tr>`;
+        return;
+    }
+
+    tbody.innerHTML += `
+        <tr class="grand-total-row">
+            <td colspan="3" style="text-align:right; padding-right:10px;"><b>एकूण बेरीज (Grand Total)</b></td>
             <td><b>${grandBoys}</b></td>
             <td><b>${grandGirls}</b></td>
             <td><b>${grandBoys + grandGirls}</b></td>
