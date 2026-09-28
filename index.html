@@ -198,7 +198,7 @@ body{
     margin-bottom:12px;
     color:#117a65;
     font-weight:bold;
-    text-align:center; /* Right वरून Center केले */
+    text-align:center;
     box-shadow:0 3px 10px rgba(0,0,0,.12);
 }
 
@@ -937,7 +937,7 @@ function syncBulkToGoogleSheet(allData, schoolsCount) {
     .then(result => {
         if(result.status === "success") {
             console.log("✅ Bulk Data saved to cloud successfully.");
-            alert(`✅ यशस्वी! एकूण ${schoolsCount} शाळांचा डेटा Excel मधून क्लाऊडवर (Live) जतन झाला आहे. आता ही माहिती मोबाईलवरही दिसेल.`);
+            alert(`✅ यशस्वी! एकूण ${schoolsCount} शाळांचा डेटा Excel मधून क्लाऊडवर (Live) जतन झाला মাঠে आहे. आता ही माहिती मोबाईलवरही दिसेल.`);
         }
     })
     .catch(e => {
@@ -1089,7 +1089,7 @@ function verifyUdiseCode(){
 
     /* 11 DIGITS */
     if(!/^\d{11}$/.test(code)){
-        error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यक কাশী असणे आवश्यक आहे.";
+        error.innerText="❌ UDISE Code नेमका 11 अंकी असणे आवश्यक आहे.";
         return;
     }
 
@@ -1116,9 +1116,10 @@ function verifyUdiseCode(){
     document.getElementById("tabBtn6").style.display="none";
     document.getElementById("tabBtn7").style.display="none";
 
-    /* ★ Changed from multiple lines (<br>) to single line as requested ★ */
     document.getElementById("authorizedSchoolName").innerHTML=`
-        🏫 <b>${school.name}</b> <span style="font-size:12px; color:#27ae60; font-weight:bold">(${school.marathiName})</span> | <span style="font-size:11px">UDISE Code : ${school.udise}</span>
+        🏫 <b>${school.name}</b><br>
+        <span style="font-size:12px; color:#27ae60; font-weight:bold">${school.marathiName}</span><br>
+        <span style="font-size:11px">UDISE Code : ${school.udise}</span>
     `;
 
     document.getElementById("loggedSchoolTopHeader").innerHTML=`
@@ -1213,7 +1214,7 @@ function getClassesForSchool(name, ignoreMapping = false){
         return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
     }
     if(name.includes("UPPER PRIMARY")){
-        return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी"];
+        return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८্বা वी"];
     }
     return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी"];
 }
