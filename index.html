@@ -436,7 +436,6 @@ input.enrol-input:focus{
     <button id="tabBtn2" style="display:none" onclick="switchTab(2)">📝 पटसंख्या भरणा</button>
     <button id="tabBtn3" style="display:none" onclick="switchTab(3)">📊 व्यवस्थापनानुसार गोषवारा</button>
     <button id="tabBtn4" style="display:none" onclick="switchTab(4)">📈 वर्गनिहाय गोषवारा</button>
-    <button id="tabBtn8" style="display:none" onclick="switchTab(8)">🏫 निवडक वर्गवार</button>
     <button id="tabBtn7" style="display:none" onclick="switchTab(7)">🏫 शाळानिहाय गोषवारा</button>
     <button id="tabBtn6" style="display:none" onclick="switchTab(6)">📈 कल व आलेख</button>
     <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग</button>
@@ -611,7 +610,7 @@ input.enrol-input:focus{
 <button class="btn red" onclick="downloadPDF('printArea2')">📄 PDF</button>
 </div>
 
-<div class="sub-title">★ स्वतःचा गोषवारा तयार करा (जातीनिहाय)</div>
+<div class="sub-title">★ स्वतःचा गोषवारा तयार करा (Custom Summary)</div>
 <div style="background:#e8f8f5; padding:15px; border-radius:8px; margin-bottom:20px; border:2px dashed #27ae60;">
     <p style="margin-top:0; font-size:14px; font-weight:bold; color:#117a65;">कोणत्या इयत्तांचा एकत्रित गोषवारा पाहायचा ते निवडा:</p>
     <div id="customClassCheckboxes" style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:15px;"></div>
@@ -684,45 +683,8 @@ input.enrol-input:focus{
 
 <div class="page-nav">
 <button onclick="switchTab(3)">⬅️ मागील पेज</button>
-<button onclick="switchTab(8)">पुढील पेज ➡️</button>
+<button onclick="switchTab(7)">पुढील पेज ➡️</button>
 </div>
-</section>
-
-<!-- PAGE 8 : NEW CUSTOM CLASS-WISE SUMMARY (Admin Only) -->
-<section id="section8" class="page-section">
-    <div class="button-area">
-        <button class="btn blue" onclick="downloadExcel('customClasswiseTable')">📥 Excel डाउनलोड</button>
-        <button class="btn red" onclick="downloadPDF('printArea8')">📄 PDF डाउनलोड</button>
-    </div>
-
-    <div class="sub-title">★ शाळेसमोर वर्गवार पटसंख्या पहा (निवडक वर्ग)</div>
-    <div style="background:#e8f8f5; padding:15px; border-radius:8px; margin-bottom:20px; border:2px dashed #27ae60;">
-        <p style="margin-top:0; font-size:14px; font-weight:bold; color:#117a65;">कोणत्या इयत्तांची पटसंख्या शाळेसमोर पाहायची आहे ते निवडा:</p>
-        <div id="customClasswiseCheckboxes" style="display:flex; flex-wrap:wrap; gap:12px; margin-bottom:15px;"></div>
-        <button class="btn green" onclick="generateCustomClasswiseSummary()">📊 गोषवारा तयार करा</button>
-    </div>
-
-    <div id="printArea8">
-        <div class="table-responsive" style="margin-top: 15px;">
-            <table id="customClasswiseTable">
-                <thead id="customClasswiseThead">
-                    <tr>
-                        <th rowspan="2">अ.क्र.</th>
-                        <th rowspan="2" style="text-align:left; min-width:200px;">शाळेचे नाव</th>
-                    </tr>
-                    <tr></tr>
-                </thead>
-                <tbody id="customClasswiseTbody">
-                    <tr><td colspan="50" style="color:#7f8c8d;"><i>(गोषवारा तयार करण्यासाठी वर्ग निवडून वरील बटणावर क्लिक करा)</i></td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="page-nav">
-        <button onclick="switchTab(4)">⬅️ मागील पेज</button>
-        <button onclick="switchTab(7)">पुढील पेज ➡️</button>
-    </div>
 </section>
 
 <!-- PAGE 7 : SCHOOL-WISE CLASS SUMMARY (नवीन क्रम) -->
@@ -741,7 +703,7 @@ input.enrol-input:focus{
     </div>
     
     <div class="page-nav">
-        <button onclick="switchTab(8)">⬅️ मागील पेज</button>
+        <button onclick="switchTab(4)">⬅️ मागील पेज</button>
         <button onclick="switchTab(6)">पुढील पेज ➡️</button>
     </div>
 </section>
@@ -960,7 +922,7 @@ function syncBulkToGoogleSheet(allData, schoolsCount) {
     
     const loadingDiv = document.createElement("div");
     loadingDiv.id = "bulkSaveLoader";
-    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.8); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:18px; font-weight:bold; text-align:center; padding:20px;'><span style='font-size:40px; margin-bottom:10px;'>🚀</span> एक्सेल (Excel) मधील सर्व डेटा क्लाऊडवर (Live) पाठवला जात आहे...<br><br>कृपया थांबा, यास काही सेकंद लागू शकतात.</div>";
+    loadingDiv.innerHTML = "<div style='background:rgba(0,0,0,0.8); color:#fff; position:fixed; top:0; left:0; width:100%; height:100%; z-index:9999; display:flex; flex-direction:column; justify-content:center; align-items:center; font-size:18px; font-weight:bold; text-align:center; padding:20px;'><span style='font-size:40px; margin-bottom:10px;'>🚀</span> एक्सेल (Excel) मधील सर्व डेटा क्लाऊडवर (Live) पाठवला जात आहे...<br><br>कृपया थांबा, यास काही सेक মিলিটারি लागू शकतात.</div>";
     document.body.appendChild(loadingDiv);
 
     fetch(GOOGLE_SCRIPT_WEB_URL, {
@@ -1038,7 +1000,6 @@ window.addEventListener("DOMContentLoaded", function(){
     });
 
     renderCustomClassCheckboxes();
-    renderCustomClasswiseCheckboxes();
     syncFromGoogleSheet();
 });
 
@@ -1093,7 +1054,7 @@ function switchTab(n){
     document.getElementById("section"+n).classList.add("active");
     document.getElementById("tabBtn"+n).classList.add("active-tab");
 
-    if(n===3 || n===4 || n===7 || n===8) { 
+    if(n===3 || n===4 || n===7) { // 7 व्या पेजसाठी सुद्धा डेटा रिफ्रेश
         syncFromGoogleSheet();
         renderAllGoshwaras();
     }
@@ -1119,7 +1080,6 @@ function verifyUdiseCode(){
         
         document.getElementById("tabBtn3").style.display="inline-block";
         document.getElementById("tabBtn4").style.display="inline-block";
-        document.getElementById("tabBtn8").style.display="inline-block"; // नवीन टॅब
         document.getElementById("tabBtn7").style.display="inline-block";
         document.getElementById("tabBtn6").style.display="inline-block";
         document.getElementById("tabBtn5").style.display="inline-block";
@@ -1152,7 +1112,6 @@ function verifyUdiseCode(){
     document.getElementById("tabBtn2").style.display="inline-block";
     document.getElementById("tabBtn3").style.display="none";
     document.getElementById("tabBtn4").style.display="none";
-    document.getElementById("tabBtn8").style.display="none";
     document.getElementById("tabBtn5").style.display="none";
     document.getElementById("tabBtn6").style.display="none";
     document.getElementById("tabBtn7").style.display="none";
@@ -1192,7 +1151,6 @@ function logoutSchool(){
     document.getElementById("tabBtn2").style.display="none";
     document.getElementById("tabBtn3").style.display="none";
     document.getElementById("tabBtn4").style.display="none";
-    document.getElementById("tabBtn8").style.display="none";
     document.getElementById("tabBtn5").style.display="none";
     document.getElementById("tabBtn6").style.display="none";
     document.getElementById("tabBtn7").style.display="none";
@@ -1257,7 +1215,7 @@ function getClassesForSchool(name, ignoreMapping = false){
         return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी","इ.९ वी","इ.१० वी"];
     }
     if(name.includes("UPPER PRIMARY")){
-        return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ বাজে","इ.७ वी","इ.८ वी"];
+        return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी"];
     }
     return ["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी"];
 }
@@ -1416,7 +1374,7 @@ function loadSchoolEnrolmentData(){
     const all=readStorage("schoolEnrolmentData",{});
     const records=all[currentLoggedInSchool];
     if(!records) {
-        updateFormGrandTotal(); 
+        updateFormGrandTotal(); // जर डेटा नसेल तरी तळातले शून्य (0) अपडेट व्हावेत
         return;
     }
 
@@ -1790,105 +1748,7 @@ function generateCustomSummary() {
 }
 
 /* =========================================================
-    ★ निवडक वर्गवार गोषवारा (Page 8) - Advanced M,F,T
-========================================================= */
-function renderCustomClasswiseCheckboxes() {
-    const container = document.getElementById("customClasswiseCheckboxes");
-    container.innerHTML = allClassesList.map(cls => 
-        `<label style="cursor:pointer; background:#fff; padding:4px 8px; border-radius:4px; border:1px solid #bdc3c7;"><input type="checkbox" value="${cls}" class="custom-classwise-cb"> ${cls}</label>`
-    ).join("");
-}
-
-function generateCustomClasswiseSummary() {
-    const checkedBoxes = document.querySelectorAll('.custom-classwise-cb:checked');
-    if(checkedBoxes.length === 0) {
-        alert("कृपया गोषवारा तयार करण्यासाठी किमान एक वर्ग निवडा!");
-        return;
-    }
-    const selectedClasses = Array.from(checkedBoxes).map(cb => cb.value);
-    const allData = readStorage("schoolEnrolmentData", {});
-
-    const thead = document.getElementById("customClasswiseThead");
-    const tbody = document.getElementById("customClasswiseTbody");
-
-    // Build Header
-    let headHtml1 = `<tr><th rowspan="2">अ.क्र.</th><th rowspan="2" style="text-align:left; min-width:200px;">शाळेचे नाव</th>`;
-    let headHtml2 = `<tr>`;
-    
-    selectedClasses.forEach(cls => {
-        headHtml1 += `<th colspan="3">${cls}</th>`;
-        headHtml2 += `<th>मुले</th><th>मुली</th><th>एकूण</th>`;
-    });
-    headHtml1 += `<th colspan="3" style="background:#2c3e50;">निवडलेल्या वर्गांची एकूण</th></tr>`;
-    headHtml2 += `<th style="background:#34495e; color:#fff;">मुले</th><th style="background:#34495e; color:#fff;">मुली</th><th style="background:#34495e; color:#fff;">एकूण</th></tr>`;
-    
-    thead.innerHTML = headHtml1 + headHtml2;
-
-    // Build Body
-    tbody.innerHTML = "";
-    let no = 1;
-
-    let colTotals = {};
-    selectedClasses.forEach(cls => colTotals[cls] = {b:0, g:0, t:0});
-    let grandTotal = {b:0, g:0, t:0};
-
-    schoolsWithUdise.forEach(school => {
-        const schoolClasses = getClassesForSchool(school.name);
-        const records = allData[school.name] || {};
-
-        const applicable = selectedClasses.filter(c => schoolClasses.includes(c));
-        if(!applicable.length) return; 
-
-        let trHtml = `<td>${no++}</td><td style="text-align:left"><span class="clickable-school" onclick="openSchoolModal('${school.udise}')"><b>${school.name}</b></span><br><span style="font-size:10px; color:#27ae60">${school.marathiName}</span></td>`;
-        
-        let rowB = 0, rowG = 0, rowT = 0;
-
-        selectedClasses.forEach(cls => {
-            if(schoolClasses.includes(cls)) {
-                const r = records[cls] || {};
-                const b = Number(r.sc_b||0) + Number(r.st_b||0) + Number(r.nt_b||0) + Number(r.sbc_b||0) + Number(r.obc_b||0) + Number(r.vja_b||0) + Number(r.ews_b||0) + Number(r.open_b||0);
-                const g = Number(r.sc_g||0) + Number(r.st_g||0) + Number(r.nt_g||0) + Number(r.sbc_g||0) + Number(r.obc_g||0) + Number(r.vja_g||0) + Number(r.ews_g||0) + Number(r.open_g||0);
-                const t = b + g;
-
-                colTotals[cls].b += b;
-                colTotals[cls].g += g;
-                colTotals[cls].t += t;
-                
-                rowB += b;
-                rowG += g;
-                rowT += t;
-
-                trHtml += `<td>${b}</td><td>${g}</td><td><b>${t}</b></td>`;
-            } else {
-                trHtml += `<td style="color:#bdc3c7;">-</td><td style="color:#bdc3c7;">-</td><td style="color:#bdc3c7;">-</td>`;
-            }
-        });
-
-        grandTotal.b += rowB;
-        grandTotal.g += rowG;
-        grandTotal.t += rowT;
-
-        trHtml += `<td style="background:#e8f8f5;"><b>${rowB}</b></td><td style="background:#e8f8f5;"><b>${rowG}</b></td><td style="background:#d5f5e3;"><b>${rowT}</b></td>`;
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = trHtml;
-        tbody.appendChild(tr);
-    });
-
-    if (no > 1) {
-        let footHtml = `<tr class="grand-total-row"><td colspan="2" style="text-align:right; padding-right:10px;"><b>एकूण (Grand Total)</b></td>`;
-        selectedClasses.forEach(cls => {
-            footHtml += `<td><b>${colTotals[cls].b}</b></td><td><b>${colTotals[cls].g}</b></td><td><b>${colTotals[cls].t}</b></td>`;
-        });
-        footHtml += `<td><b>${grandTotal.b}</b></td><td><b>${grandTotal.g}</b></td><td><b>${grandTotal.t}</b></td></tr>`;
-        tbody.insertAdjacentHTML('beforeend', footHtml);
-    } else {
-        tbody.innerHTML = `<tr><td colspan="${(selectedClasses.length * 3) + 5}" style="color:red; text-align:center;">निवडलेल्या वर्गांसाठी कोणताही डेटा उपलब्ध नाही.</td></tr>`;
-    }
-}
-
-/* =========================================================
-    शाळानिहाय वर्गवार गोषवारा (Page 7)
+    नवीन फंक्शन - शाळानिहाय वर्गवार गोषवारा (Page 7)
 ========================================================= */
 function renderSchoolwiseClassSummary(allData) {
     const container = document.getElementById("schoolwiseSummaryContainer");
@@ -2016,6 +1876,23 @@ function renderSchoolwiseClassSummary(allData) {
     `;
 
     container.innerHTML = html + crcHtml;
+}
+
+function renderAllGoshwaras(){
+    const data=readStorage("schoolEnrolmentData",{});
+    renderCategoryTable(data,"ZP","zpTbody");
+    renderCategoryTable(data,"Aided","aidedTbody");
+    renderCategoryTable(data,"Unaided","unaidedTbody");
+    renderMainGoshwara(data);
+    renderClasswiseBoysGirls(data);
+    renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी"],"g1_4Tbody");
+    renderTierGoshwara(data,["इ.५ वी","इ.६ वी","इ.७ वी"],"g5_7Tbody");
+    renderTierGoshwara(data,["इ.८ वी"],"g8Tbody");
+    renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी"],"g1_8Tbody");
+    renderTierGoshwara(data,["इ.९ वी","इ.१० वी"],"g9_10Tbody");
+    
+    // Page 7 function call
+    renderSchoolwiseClassSummary(data);
 }
 
 /* =========================================================
