@@ -437,6 +437,7 @@ input.enrol-input:focus{
     <button id="tabBtn3" style="display:none" onclick="switchTab(3)">📊 व्यवस्थापनानुसार गोषवारा</button>
     <button id="tabBtn4" style="display:none" onclick="switchTab(4)">📈 वर्गनिहाय गोषवारा</button>
     <button id="tabBtn8" style="display:none" onclick="switchTab(8)">🏫 निवडक वर्गवार</button>
+    <button id="tabBtn9" style="display:none" onclick="switchTab(9)">🏫 शाळा-वर्ग मॅट्रिक्स</button>
     <button id="tabBtn7" style="display:none" onclick="switchTab(7)">🏫 शाळानिहाय गोषवारा</button>
     <button id="tabBtn6" style="display:none" onclick="switchTab(6)">📈 कल व आलेख</button>
     <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग</button>
@@ -717,6 +718,31 @@ input.enrol-input:focus{
 
     <div class="page-nav">
         <button onclick="switchTab(4)">⬅️ मागील पेज</button>
+        <button onclick="switchTab(9)">पुढील पेज ➡️</button>
+    </div>
+</section>
+
+<!-- PAGE 9 : SCHOOL-CLASS MATRIX (Admin Only) -->
+<section id="section9" class="page-section">
+    <div class="button-area">
+        <button class="btn blue" onclick="downloadExcel('schoolClassMatrixTable')">📥 Excel डाउनलोड</button>
+        <button class="btn red" onclick="downloadPDF('printArea9')">📄 PDF डाउनलोड</button>
+    </div>
+
+    <div id="printArea9">
+        <div class="sub-title">★ सर्व शाळांची वर्गवार पटसंख्या (School & Class-wise Matrix)</div>
+        <p class="small-note">खालील तक्त्यामध्ये एकाच दृष्टिक्षेपात सर्व शाळांची सर्व वर्गांमधील एकूण पटसंख्या दर्शवली आहे.</p>
+        
+        <div class="table-responsive" style="margin-top: 15px;">
+            <table id="schoolClassMatrixTable">
+                <thead id="matrixThead"></thead>
+                <tbody id="matrixTbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <button onclick="switchTab(8)">⬅️ मागील पेज</button>
         <button onclick="switchTab(7)">पुढील पेज ➡️</button>
     </div>
 </section>
@@ -737,7 +763,7 @@ input.enrol-input:focus{
     </div>
     
     <div class="page-nav">
-        <button onclick="switchTab(8)">⬅️ मागील पेज</button>
+        <button onclick="switchTab(9)">⬅️ मागील पेज</button>
         <button onclick="switchTab(6)">पुढील पेज ➡️</button>
     </div>
 </section>
@@ -946,7 +972,7 @@ function syncToGoogleSheet(school, records) {
         const loader = document.getElementById("saveLoader");
         if(loader) loader.remove();
         
-        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडत ভাগে.`);
+        alert(`✅ पटसंख्या यशस्वीरीत्या जतन आणि सिंक झाली!\n\n🏫 ${currentLoggedInSchool}\n(${currentLoggedInMarathiName})\n\nधन्यवाद! आता सिस्टीममधून बाहेर पडत आहे.`);
         logoutSchool();
     });
 }
@@ -1034,7 +1060,7 @@ window.addEventListener("DOMContentLoaded", function(){
     });
 
     renderCustomClassCheckboxes();
-    renderCustomClasswiseCheckboxes(); // नवीन पेजेसाठी चेकमार्क्स
+    renderCustomClasswiseCheckboxes();
     syncFromGoogleSheet();
 });
 
@@ -1089,7 +1115,7 @@ function switchTab(n){
     document.getElementById("section"+n).classList.add("active");
     document.getElementById("tabBtn"+n).classList.add("active-tab");
 
-    if(n===3 || n===4 || n===7 || n===8) {
+    if(n===3 || n===4 || n===7 || n===8 || n===9) {
         syncFromGoogleSheet();
         renderAllGoshwaras();
     }
@@ -1115,7 +1141,8 @@ function verifyUdiseCode(){
         
         document.getElementById("tabBtn3").style.display="inline-block";
         document.getElementById("tabBtn4").style.display="inline-block";
-        document.getElementById("tabBtn8").style.display="inline-block"; // नवीन टॅब
+        document.getElementById("tabBtn8").style.display="inline-block"; 
+        document.getElementById("tabBtn9").style.display="inline-block"; // नवीन मॅट्रिक्स टॅब
         document.getElementById("tabBtn7").style.display="inline-block";
         document.getElementById("tabBtn6").style.display="inline-block";
         document.getElementById("tabBtn5").style.display="inline-block";
@@ -1149,6 +1176,7 @@ function verifyUdiseCode(){
     document.getElementById("tabBtn3").style.display="none";
     document.getElementById("tabBtn4").style.display="none";
     document.getElementById("tabBtn8").style.display="none";
+    document.getElementById("tabBtn9").style.display="none";
     document.getElementById("tabBtn5").style.display="none";
     document.getElementById("tabBtn6").style.display="none";
     document.getElementById("tabBtn7").style.display="none";
@@ -1189,6 +1217,7 @@ function logoutSchool(){
     document.getElementById("tabBtn3").style.display="none";
     document.getElementById("tabBtn4").style.display="none";
     document.getElementById("tabBtn8").style.display="none";
+    document.getElementById("tabBtn9").style.display="none";
     document.getElementById("tabBtn5").style.display="none";
     document.getElementById("tabBtn6").style.display="none";
     document.getElementById("tabBtn7").style.display="none";
@@ -1412,7 +1441,7 @@ function loadSchoolEnrolmentData(){
     const all=readStorage("schoolEnrolmentData",{});
     const records=all[currentLoggedInSchool];
     if(!records) {
-        updateFormGrandTotal(); // जर डेटा नसेल तरी तळातले शून्य (0) अपडेट व्हावेत
+        updateFormGrandTotal(); 
         return;
     }
 
@@ -1786,7 +1815,7 @@ function generateCustomSummary() {
 }
 
 /* =========================================================
-    ★ नवीन फंक्शन - निवडक वर्गवार गोषवारा (Page 8) ★
+    निवडक वर्गवार गोषवारा (Page 8) 
 ========================================================= */
 function renderCustomClasswiseCheckboxes() {
     const container = document.getElementById("customClasswiseCheckboxes");
@@ -1871,6 +1900,72 @@ function generateCustomClasswiseSummary() {
         tbody.innerHTML = `<tr><td colspan="${selectedClasses.length + 3}" style="color:red;">निवडलेल्या वर्गांसाठी कोणताही डेटा उपलब्ध नाही.</td></tr>`;
     }
 }
+
+/* =========================================================
+    ★ नवीन फंक्शन - संपूर्ण शाळा व वर्गवार मॅट्रिक्स (Page 9) ★
+========================================================= */
+function renderSchoolClassMatrix(allData) {
+    const thead = document.getElementById("matrixThead");
+    const tbody = document.getElementById("matrixTbody");
+    if (!thead || !tbody) return;
+
+    // Header Setup
+    let headHtml = `<tr><th style="width:50px;">अ.क्र.</th><th style="min-width:220px; text-align:left;">शाळेचे नाव</th>`;
+    allClassesList.forEach(cls => {
+        headHtml += `<th>${cls}</th>`;
+    });
+    headHtml += `<th>एकूण</th></tr>`;
+    thead.innerHTML = headHtml;
+
+    let html = "";
+    let classTotals = new Array(allClassesList.length).fill(0);
+    let absoluteTotal = 0;
+    let no = 1;
+
+    schoolsWithUdise.forEach(school => {
+        const records = allData[school.name] || {};
+        const schoolClasses = getClassesForSchool(school.name);
+        let rowTotal = 0;
+
+        let rowHtml = `<tr>
+            <td>${no++}</td>
+            <td style="text-align:left;">
+                <span class="clickable-school" onclick="openSchoolModal('${school.udise}')"><b>${school.name}</b></span><br>
+                <span style="font-size:10px; color:#27ae60">${school.marathiName}</span>
+            </td>`;
+
+        allClassesList.forEach((cls, idx) => {
+            if(schoolClasses.includes(cls)) {
+                const r = records[cls] || {};
+                const b = Number(r.sc_b||0) + Number(r.st_b||0) + Number(r.nt_b||0) + Number(r.sbc_b||0) + Number(r.obc_b||0) + Number(r.vja_b||0) + Number(r.ews_b||0) + Number(r.open_b||0);
+                const g = Number(r.sc_g||0) + Number(r.st_g||0) + Number(r.nt_g||0) + Number(r.sbc_g||0) + Number(r.obc_g||0) + Number(r.vja_g||0) + Number(r.ews_g||0) + Number(r.open_g||0);
+                const tot = b + g;
+                
+                rowTotal += tot;
+                classTotals[idx] += tot;
+                rowHtml += `<td>${tot}</td>`;
+            } else {
+                rowHtml += `<td style="color:#bdc3c7;">-</td>`;
+            }
+        });
+
+        absoluteTotal += rowTotal;
+        rowHtml += `<td style="background:#e8f8f5;"><b>${rowTotal}</b></td></tr>`;
+        html += rowHtml;
+    });
+
+    let footHtml = `<tr class="grand-total-row">
+        <td colspan="2" style="text-align:right; padding-right:10px;"><b>एकूण (Grand Total)</b></td>`;
+    
+    classTotals.forEach(tot => {
+        footHtml += `<td><b>${tot}</b></td>`;
+    });
+    
+    footHtml += `<td><b>${absoluteTotal}</b></td></tr>`;
+
+    tbody.innerHTML = html + footHtml;
+}
+
 
 /* =========================================================
     शाळानिहाय वर्गवार गोषवारा (Page 7)
@@ -2042,7 +2137,7 @@ function normalizeClassName(cls) {
         "इ .1 ली": "इ.१ ली", "इ. 1 ली": "इ.१ ली", "इ.1 ली": "इ.१ ली",
         "इ.2 री": "इ.२ री", "इ.3 री": "इ.३ री", "इ.4 थी": "इ.४ थी",
         "इ.5 वी": "इ.५ वी", "इ.6 वी": "इ.६ वी", "इ.7 वी": "इ.७ वी",
-        "इ.8 वी": "इ.८ वी", "इ.9 वी": "इ.९ वी", "इ. 10 वी": "इ.१० वी",
+        "इ.8 वी": "इ.८ वी", "इ.9 वी": "इ.९ শারীরিক", "इ. 10 वी": "इ.१० वी",
         "इ.10 वी": "इ.१० वी", "इ.11 वी": "इ.11 वी", "इ.12 वी": "इ.12 वी"
     };
     return map[cls] || cls;
