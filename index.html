@@ -444,6 +444,7 @@ input.enrol-input:focus{
     <button id="tabBtn13" style="display:none" onclick="switchTab(13)">🏫 निवडक शाळा-वर्ग मॅट्रिक्स</button>
     <button id="tabBtn6" style="display:none" onclick="switchTab(6)">📈 कल व आलेख</button>
     <button id="tabBtn5" style="display:none" onclick="switchTab(5)">⚙️ वर्ग सेटिंग</button>
+    <button id="tabBtn14" style="display:none" onclick="switchTab(14)">🏫 ZP गणवेश गोषवारा</button>
 </div>
 
 <!-- PAGE 0 : WELCOME PAGE -->
@@ -1044,7 +1045,62 @@ input.enrol-input:focus{
 
     <div class="page-nav">
         <button onclick="switchTab(6)">⬅️ मागील पेज</button>
-        <span></span>
+        <button onclick="switchTab(14)">पुढील पेज ➡️️</button>
+    </div>
+</section>
+
+<!-- PAGE 14 : ZP UNIFORM SUMMARY (Admin Only) -->
+<section id="section14" class="page-section">
+    <div class="button-area">
+        <button class="btn blue" onclick="downloadExcel('p14Table')">📊 Excel डाउनलोड</button>
+        <button class="btn red" onclick="downloadPDF('p14PrintArea')">📄 PDF डाउनलोड</button>
+    </div>
+
+    <div id="p14PrintArea" style="background:#fff; padding:15px; border-radius:8px;">
+        <h3 style="text-align:center; color:#2980b9; margin-top:0; margin-bottom:5px;">समग्र शिक्षा अंतर्गत मोफत  गणवेश योजना सन-2026-2027</h3>
+        
+        <div class="table-responsive">
+            <table id="p14Table">
+                <thead>
+                    <tr>
+                        <th rowspan="3" style="min-width:40px;">अ.क्र.</th>
+                        <th rowspan="3" style="min-width:180px;">शाळेचे नाव</th>
+                        <th colspan="16">जिल्हा परिषद शाळेतील इ.1 ते 8 वी सर्व विद्यार्थी संख्या सन 2026-27 प्रपत्र अ</th>
+                        <th colspan="3">एकूण लाभार्थी</th>
+                        <th colspan="6">विद्यार्थी संख्या इ.1 ली ते 8 वी</th>
+                    </tr>
+                    <tr>
+                        <th colspan="2">इ.१ ली</th>
+                        <th colspan="2">इ.२ री</th>
+                        <th colspan="2">इ.३ री</th>
+                        <th colspan="2">इ.४ थी</th>
+                        <th colspan="2">इ.५ वी</th>
+                        <th colspan="2">इ.६ वी</th>
+                        <th colspan="2">इ.७ वी</th>
+                        <th colspan="2">इ.८ वी</th>
+                        <th rowspan="2">मुले</th><th rowspan="2">मुली</th><th rowspan="2">एकूण</th>
+                        <th rowspan="2">सर्व मुली</th><th rowspan="2">SC मुले</th><th rowspan="2">ST मुले</th><th rowspan="2">BPL मुले</th><th rowspan="2">उर्वरित/राज्य शासन मुले</th><th rowspan="2">एकूण</th>
+                    </tr>
+                    <tr>
+                        <th>मुले</th><th>मुली</th>
+                        <th>मुले</th><th>मुली</th>
+                        <th>मुले</th><th>मुली</th>
+                        <th>मुले</th><th>मुली</th>
+                        <th>मुले</th><th>मुली</th>
+                        <th>मुले</th><th>मुली</th>
+                        <th>मुले</th><th>मुली</th>
+                        <th>मुले</th><th>मुली</th>
+                    </tr>
+                </thead>
+                <tbody id="p14Tbody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="page-nav">
+        <button onclick="switchTab(5)">⬅️ मागील पेज</button>
+        <span></span> 
     </div>
 </section>
 
@@ -1304,7 +1360,7 @@ function switchTab(n){
     document.getElementById("section"+n).classList.add("active");
     document.getElementById("tabBtn"+n).classList.add("active-tab");
 
-    if(n===3 || n===4 || n===7 || n===8 || n===9 || n===10 || n===11 || n===12 || n===13) {
+    if(n===3 || n===4 || n===7 || n===8 || n===9 || n===10 || n===11 || n===12 || n===13 || n===14) {
         syncFromGoogleSheet();
         renderAllGoshwaras();
     }
@@ -1314,7 +1370,7 @@ function switchTab(n){
     if(n===9) p9Init(); 
     if(n===10) p10Init();
     if(n===11) p11Init();
-    if(n===13) p13Init(); // Init Page 13 Checkboxes
+    if(n===13) p13Init();
 
     window.scrollTo({top:0, behavior:"smooth"});
 }
@@ -1344,6 +1400,7 @@ function verifyUdiseCode(){
         document.getElementById("tabBtn13").style.display="inline-block";
         document.getElementById("tabBtn6").style.display="inline-block";
         document.getElementById("tabBtn5").style.display="inline-block";
+        document.getElementById("tabBtn14").style.display="inline-block";
         switchTab(3);
         return;
     }
@@ -1382,6 +1439,7 @@ function verifyUdiseCode(){
     document.getElementById("tabBtn11").style.display="none";
     document.getElementById("tabBtn12").style.display="none";
     document.getElementById("tabBtn13").style.display="none";
+    document.getElementById("tabBtn14").style.display="none";
 
     document.getElementById("authorizedSchoolName").innerHTML=`
         🏫 <b>${school.name}</b><br>
@@ -1426,6 +1484,7 @@ function logoutSchool(){
     document.getElementById("tabBtn11").style.display="none";
     document.getElementById("tabBtn12").style.display="none";
     document.getElementById("tabBtn13").style.display="none";
+    document.getElementById("tabBtn14").style.display="none";
 
     switchTab(0);
 }
@@ -2232,6 +2291,88 @@ function renderManagementClasswiseSummary(allData) {
     container.innerHTML = finalHtml;
 }
 
+/* =========================================================
+    PAGE 14 : ZP UNIFORM SUMMARY (CLASS 1 TO 8)
+========================================================= */
+function renderZPUniformSummary(allData) {
+    const tbody = document.getElementById("p14Tbody");
+    if (!tbody) return;
+    tbody.innerHTML = "";
+
+    const classesToInclude = ["इ.१ ली", "इ.२ री", "इ.३ री", "इ.४ थी", "इ.५ वी", "इ.६ वी", "इ.७ वी", "इ.८ वी"];
+    const zpSchools = schoolsWithUdise.filter(s => s.type === "ZP");
+
+    let no = 1;
+    let gtClasses = {};
+    classesToInclude.forEach(c => gtClasses[c] = {b: 0, g: 0});
+    
+    let gtTotalBoys = 0, gtTotalGirls = 0, gtTotalAll = 0;
+    let gtAllGirls = 0, gtSCBoys = 0, gtSTBoys = 0, gtBPLBoys = 0, gtRestBoys = 0, gtFinalTotal = 0;
+
+    zpSchools.forEach(school => {
+        const records = allData[school.name] || {};
+        let rowHtml = `<td>${no++}</td><td style="text-align:left;"><b>${school.name}</b><br><span style="font-size:10px; color:#27ae60">${school.marathiName}</span></td>`;
+        
+        let sBoys = 0, sGirls = 0;
+        let sAllGirls = 0, sSCBoys = 0, sSTBoys = 0, sBPL = 0;
+        
+        classesToInclude.forEach(cls => {
+            const r = records[cls] || {};
+            const scB = Number(r.sc_b||0), scG = Number(r.sc_g||0);
+            const stB = Number(r.st_b||0), stG = Number(r.st_g||0);
+            const ntB = Number(r.nt_b||0), ntG = Number(r.nt_g||0);
+            const sbcB = Number(r.sbc_b||0), sbcG = Number(r.sbc_g||0);
+            const obcB = Number(r.obc_b||0), obcG = Number(r.obc_g||0);
+            const vjaB = Number(r.vja_b||0), vjaG = Number(r.vja_g||0);
+            const ewsB = Number(r.ews_b||0), ewsG = Number(r.ews_g||0);
+            const openB = Number(r.open_b||0), openG = Number(r.open_g||0);
+            const bpl = Number(r.bpl||0);
+            
+            const b = scB + stB + ntB + sbcB + obcB + vjaB + ewsB + openB;
+            const g = scG + stG + ntG + sbcG + obcG + vjaG + ewsG + openG;
+
+            rowHtml += `<td>${b}</td><td>${g}</td>`;
+            
+            gtClasses[cls].b += b;
+            gtClasses[cls].g += g;
+            
+            sBoys += b;
+            sGirls += g;
+            sSCBoys += scB;
+            sSTBoys += stB;
+            sBPL += bpl; 
+        });
+
+        sAllGirls = sGirls;
+        let sOtherBoys = Math.max(0, sBoys - sSCBoys - sSTBoys - sBPL);
+        let finalTotal = sAllGirls + sSCBoys + sSTBoys + sBPL + sOtherBoys;
+
+        rowHtml += `<td>${sBoys}</td><td>${sGirls}</td><td><b>${sBoys + sGirls}</b></td>`;
+        rowHtml += `<td>${sAllGirls}</td><td>${sSCBoys}</td><td>${sSTBoys}</td><td>${sBPL}</td><td>${sOtherBoys}</td><td><b>${finalTotal}</b></td>`;
+
+        tbody.innerHTML += `<tr>${rowHtml}</tr>`;
+        
+        gtTotalBoys += sBoys;
+        gtTotalGirls += sGirls;
+        gtTotalAll += (sBoys + sGirls);
+        gtAllGirls += sAllGirls;
+        gtSCBoys += sSCBoys;
+        gtSTBoys += sSTBoys;
+        gtBPLBoys += sBPL;
+        gtRestBoys += sOtherBoys;
+        gtFinalTotal += finalTotal;
+    });
+
+    let tfootHtml = `<tr class="grand-total-row"><td colspan="2" style="text-align:right;"><b>एकूण (Grand Total)</b></td>`;
+    classesToInclude.forEach(cls => {
+        tfootHtml += `<td><b>${gtClasses[cls].b}</b></td><td><b>${gtClasses[cls].g}</b></td>`;
+    });
+    tfootHtml += `<td><b>${gtTotalBoys}</b></td><td><b>${gtTotalGirls}</b></td><td><b>${gtTotalAll}</b></td>`;
+    tfootHtml += `<td><b>${gtAllGirls}</b></td><td><b>${gtSCBoys}</b></td><td><b>${gtSTBoys}</b></td><td><b>${gtBPLBoys}</b></td><td><b>${gtRestBoys}</b></td><td><b>${gtFinalTotal}</b></td></tr>`;
+
+    tbody.innerHTML += tfootHtml;
+}
+
 function renderAllGoshwaras(){
     const data=readStorage("schoolEnrolmentData",{});
     renderCategoryTable(data,"ZP","zpTbody");
@@ -2246,7 +2387,8 @@ function renderAllGoshwaras(){
     renderTierGoshwara(data,["इ.९ वी","इ.१० वी"],"g9_10Tbody");
     
     renderSchoolwiseClassSummary(data);
-    renderManagementClasswiseSummary(data); // Call for Page 12
+    renderManagementClasswiseSummary(data); 
+    renderZPUniformSummary(data); // Call for Page 14
 }
 
 /* =========================================================
