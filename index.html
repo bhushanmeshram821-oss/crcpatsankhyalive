@@ -405,6 +405,21 @@ input.enrol-input:focus{
     color:#566573;
 }
 
+/* Page 14 Inputs */
+.p14-input {
+    width: 50px;
+    padding: 3px;
+    text-align: center;
+    border: 1px solid #2980b9;
+    border-radius: 4px;
+    font-size: 11px;
+}
+.p14-input:focus {
+    background: #fcf3cf;
+    outline: none;
+    border-color: #27ae60;
+}
+
 @media(max-width:600px){
     .container{padding:8px}
     .main-header h2{font-size:17px}
@@ -533,7 +548,7 @@ input.enrol-input:focus{
 </div>
 
 <div class="page-nav">
-<button onclick="switchTab(1)">⬅️️ मागील पेज</button>
+<button onclick="switchTab(1)">⬅ मागील पेज</button>
 <button onclick="switchTab(3)" id="gotoGoshwaraBtn" style="display:none">गोषवारा ➡️</button>
 </div>
 </section>
@@ -707,7 +722,7 @@ input.enrol-input:focus{
     
     <div class="page-nav">
         <button onclick="switchTab(4)">⬅️ मागील पेज</button>
-        <button onclick="switchTab(8)">पुढील पेज ➡️️</button>
+        <button onclick="switchTab(8)">पुढील पेज ➡</button>
     </div>
 </section>
 
@@ -851,7 +866,7 @@ input.enrol-input:focus{
     </div>
 
     <div class="page-nav">
-        <button onclick="switchTab(9)">⬅️ मागील पेज</button>
+        <button onclick="switchTab(9)">⬅ मागील पेज</button>
         <button onclick="switchTab(11)">पुढील पेज ➡️</button> 
     </div>
 </section>
@@ -1243,7 +1258,7 @@ function syncBulkToGoogleSheet(allData, schoolsCount) {
     .then(result => {
         if(result.status === "success") {
             console.log("✅ Bulk Data saved to cloud successfully.");
-            alert(`✅ यशस्वी! एकूण ${schoolsCount} शाळांचा डेटा Excel मधून क्लाऊडवर (Live) जतन झाला आहे. आता ही माहिती मोबाईलवरही दिसेल.`);
+            alert(`✅ यशस्वी! एकूण ${schoolsCount} शाळांचा डेटा Excel मधून क्लाऊडवर (Live) जतन झाला মাঠে. आता ही माहिती मोबाईलवरही दिसेल.`);
         }
     })
     .catch(e => {
@@ -1278,7 +1293,7 @@ function writeStorage(key,value){
         localStorage.setItem(key,JSON.stringify(value));
         return true;
     }catch(e){
-        alert("⚠️️ डेटा जतन करता आला नाही.");
+        alert("⚠️ डेटा जतन करता आला नाही.");
         return false;
     }
 }
@@ -2294,6 +2309,45 @@ function renderManagementClasswiseSummary(allData) {
 /* =========================================================
     PAGE 14 : ZP UNIFORM SUMMARY (CLASS 1 TO 8)
 ========================================================= */
+function updateP14Totals() {
+    let gtBpl = 0;
+    let gtFinal = 0;
+    let gtRest = 0;
+
+    const rows = document.querySelectorAll('.p14-row');
+    rows.forEach(row => {
+        const idx = row.dataset.idx;
+        const bplInput = document.getElementById(`p14_bpl_${idx}`);
+        const restCell = document.getElementById(`p14_rest_${idx}`);
+        const totalCell = document.getElementById(`p14_total_${idx}`);
+
+        const totalBoys = parseInt(row.dataset.totalboys || 0);
+        const scBoys = parseInt(row.dataset.scboys || 0);
+        const stBoys = parseInt(row.dataset.stboys || 0);
+        const allGirls = parseInt(row.dataset.allgirls || 0);
+
+        const bplVal = parseInt(bplInput.value || 0);
+
+        // उर्वरित मुले = एकूण मुले - SC मुले - ST मुले - BPL मुले
+        let restVal = totalBoys - scBoys - stBoys - bplVal;
+        if (restVal < 0) restVal = 0; // Prevent negative numbers
+
+        restCell.innerText = restVal;
+
+        // एकूण लाभार्थी = सर्व मुली + SC मुले + ST मुले + BPL मुले + उर्वरित मुले
+        const rowTotal = allGirls + scBoys + stBoys + bplVal + restVal;
+        totalCell.innerText = rowTotal;
+
+        gtBpl += bplVal;
+        gtRest += restVal;
+        gtFinal += rowTotal;
+    });
+
+    document.getElementById('p14_gt_bpl').innerText = gtBpl;
+    document.getElementById('p14_gt_rest').innerText = gtRest;
+    document.getElementById('p14_gt_final').innerText = gtFinal;
+}
+
 function renderZPUniformSummary(allData) {
     const tbody = document.getElementById("p14Tbody");
     if (!tbody) return;
@@ -2309,12 +2363,12 @@ function renderZPUniformSummary(allData) {
     let gtTotalBoys = 0, gtTotalGirls = 0, gtTotalAll = 0;
     let gtAllGirls = 0, gtSCBoys = 0, gtSTBoys = 0, gtBPLBoys = 0, gtRestBoys = 0, gtFinalTotal = 0;
 
-    zpSchools.forEach(school => {
+    zpSchools.forEach((school, index) => {
         const records = allData[school.name] || {};
         let rowHtml = `<td>${no++}</td><td style="text-align:left;"><b>${school.name}</b><br><span style="font-size:10px; color:#27ae60">${school.marathiName}</span></td>`;
         
         let sBoys = 0, sGirls = 0;
-        let sAllGirls = 0, sSCBoys = 0, sSTBoys = 0, sBPL = 0;
+        let sAllGirls = 0, sSCBoys = 0, sSTBoys = 0;
         
         classesToInclude.forEach(cls => {
             const r = records[cls] || {};
@@ -2326,7 +2380,6 @@ function renderZPUniformSummary(allData) {
             const vjaB = Number(r.vja_b||0), vjaG = Number(r.vja_g||0);
             const ewsB = Number(r.ews_b||0), ewsG = Number(r.ews_g||0);
             const openB = Number(r.open_b||0), openG = Number(r.open_g||0);
-            const bpl = Number(r.bpl||0);
             
             const b = scB + stB + ntB + sbcB + obcB + vjaB + ewsB + openB;
             const g = scG + stG + ntG + sbcG + obcG + vjaG + ewsG + openG;
@@ -2340,17 +2393,35 @@ function renderZPUniformSummary(allData) {
             sGirls += g;
             sSCBoys += scB;
             sSTBoys += stB;
-            sBPL += bpl; 
         });
 
         sAllGirls = sGirls;
-        let sOtherBoys = Math.max(0, sBoys - sSCBoys - sSTBoys - sBPL);
-        let finalTotal = sAllGirls + sSCBoys + sSTBoys + sBPL + sOtherBoys;
+        
+        // Initial BPL can be set to 0 or retrieved if stored previously, assuming 0 for fresh input
+        let initialBPL = 0; 
+        let initialRest = sBoys - sSCBoys - sSTBoys - initialBPL;
+        if(initialRest < 0) initialRest = 0;
+        let initialTotal = sAllGirls + sSCBoys + sSTBoys + initialBPL + initialRest;
 
         rowHtml += `<td>${sBoys}</td><td>${sGirls}</td><td><b>${sBoys + sGirls}</b></td>`;
-        rowHtml += `<td>${sAllGirls}</td><td>${sSCBoys}</td><td>${sSTBoys}</td><td>${sBPL}</td><td>${sOtherBoys}</td><td><b>${finalTotal}</b></td>`;
+        rowHtml += `<td>${sAllGirls}</td><td>${sSCBoys}</td><td>${sSTBoys}</td>`;
+        
+        // Input field for BPL
+        rowHtml += `
+            <td><input type="number" min="0" class="p14-input" id="p14_bpl_${index}" value="${initialBPL}" oninput="updateP14Totals()"></td>
+            <td id="p14_rest_${index}">${initialRest}</td>
+            <td><b id="p14_total_${index}">${initialTotal}</b></td>
+        `;
 
-        tbody.innerHTML += `<tr>${rowHtml}</tr>`;
+        let tr = document.createElement('tr');
+        tr.className = 'p14-row';
+        tr.dataset.idx = index;
+        tr.dataset.totalboys = sBoys;
+        tr.dataset.scboys = sSCBoys;
+        tr.dataset.stboys = sSTBoys;
+        tr.dataset.allgirls = sAllGirls;
+        tr.innerHTML = rowHtml;
+        tbody.appendChild(tr);
         
         gtTotalBoys += sBoys;
         gtTotalGirls += sGirls;
@@ -2358,9 +2429,9 @@ function renderZPUniformSummary(allData) {
         gtAllGirls += sAllGirls;
         gtSCBoys += sSCBoys;
         gtSTBoys += sSTBoys;
-        gtBPLBoys += sBPL;
-        gtRestBoys += sOtherBoys;
-        gtFinalTotal += finalTotal;
+        gtBPLBoys += initialBPL;
+        gtRestBoys += initialRest;
+        gtFinalTotal += initialTotal;
     });
 
     let tfootHtml = `<tr class="grand-total-row"><td colspan="2" style="text-align:right;"><b>एकूण (Grand Total)</b></td>`;
@@ -2368,9 +2439,10 @@ function renderZPUniformSummary(allData) {
         tfootHtml += `<td><b>${gtClasses[cls].b}</b></td><td><b>${gtClasses[cls].g}</b></td>`;
     });
     tfootHtml += `<td><b>${gtTotalBoys}</b></td><td><b>${gtTotalGirls}</b></td><td><b>${gtTotalAll}</b></td>`;
-    tfootHtml += `<td><b>${gtAllGirls}</b></td><td><b>${gtSCBoys}</b></td><td><b>${gtSTBoys}</b></td><td><b>${gtBPLBoys}</b></td><td><b>${gtRestBoys}</b></td><td><b>${gtFinalTotal}</b></td></tr>`;
+    tfootHtml += `<td><b>${gtAllGirls}</b></td><td><b>${gtSCBoys}</b></td><td><b>${gtSTBoys}</b></td>`;
+    tfootHtml += `<td id="p14_gt_bpl"><b>${gtBPLBoys}</b></td><td id="p14_gt_rest"><b>${gtRestBoys}</b></td><td id="p14_gt_final"><b>${gtFinalTotal}</b></td></tr>`;
 
-    tbody.innerHTML += tfootHtml;
+    tbody.insertAdjacentHTML('beforeend', tfootHtml);
 }
 
 function renderAllGoshwaras(){
@@ -2383,7 +2455,7 @@ function renderAllGoshwaras(){
     renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी"],"g1_4Tbody");
     renderTierGoshwara(data,["इ.५ वी","इ.६ वी","इ.७ वी"],"g5_7Tbody");
     renderTierGoshwara(data,["इ.८ वी"],"g8Tbody");
-    renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ আট"],"g1_8Tbody");
+    renderTierGoshwara(data,["इ.१ ली","इ.२ री","इ.३ री","इ.४ थी","इ.५ वी","इ.६ वी","इ.७ वी","इ.८ वी"],"g1_8Tbody");
     renderTierGoshwara(data,["इ.९ वी","इ.१० वी"],"g9_10Tbody");
     
     renderSchoolwiseClassSummary(data);
